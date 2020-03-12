@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$packageName    = 'qownnotes.fresh'
+$packageName    = 'qownnotes-fresh'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url            = 'https://github.com/pbek/QOwnNotes/releases/download/windows-b5460/QOwnNotes.zip' 
 $checksum       = '59E6EBAF96482EBA779EE60E8F0746365DE7C038E839035026D38624C0A95B60'
