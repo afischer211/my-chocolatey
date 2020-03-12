@@ -3,7 +3,7 @@
 <!--<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">-->
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>qownnotes.fresh</id>
+    <id>qownnotes-fresh</id>
     <version>20.3.3</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/qownnotes</packageSourceUrl>	
     <title>QOwnNotes</title>
@@ -17,7 +17,7 @@
     <description>
 QOwnNotes is the open source plain-text file notepad with markdown support and todo list manager for GNU/Linux, Mac OS X and Windows by Patrizio Bekerle, that (optionally) works together with the notes application of ownCloud or Nextcloud. So you are able to write down your thoughts with QOwnNotes and edit or search for them later from your mobile device or the ownCloud/Nextcloud web-services.
 
-##Features
+## Features
 
 * You own your own notes! All notes are stored as plain-text files on your desktop computer.
 * Sync them over devices (desktop and mobile) with your ownCloud or Nextcloud sync client.
