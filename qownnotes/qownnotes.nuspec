@@ -4,10 +4,10 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>qownnotes</id>
-    <version>20.5.2</version>
+    <version>20.5.5</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/qownnotes</packageSourceUrl>	
     <title>QOwnNotes</title>
-    <authors>Alexander Fischer</authors>
+    <authors>Patrizio Bekerle (pbek)</authors>
     <owners>afischer211</owners>
     <licenseUrl>https://github.com/pbek/QOwnNotes/blob/windows-b5324/LICENSE</licenseUrl>
     <projectUrl>https://www.qownnotes.org/</projectUrl>
