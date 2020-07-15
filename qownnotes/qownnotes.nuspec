@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>qownnotes</id>
-    <version>20.7.3</version>
+    <version>20.7.4</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/qownnotes</packageSourceUrl>	
     <title>QOwnNotes</title>
     <authors>Patrizio Bekerle (pbek)</authors>
