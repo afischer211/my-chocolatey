@@ -1,26 +1,13 @@
-$ErrorActionPreference = 'Stop'
-$packageName    = 'qownnotes'
+﻿$ErrorActionPreference = 'Stop'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url            = 'https://github.com/pbek/QOwnNotes/releases/download/v20.11.8/QOwnNotes.zip' 
-$checksum       = 'A8E1E1D4B222F2CC7F17FBB9C62D28115728C4ADEFF96E78427CA227372C9471'
-$url64          = $url
-$checksum64     = $checksum
-$checksumType   = 'sha256' 
-$checksumType64 = $checksumType
 
 $packageArgs = @{
-    #packageName = $env:ChocolateyPackageName
-    packageName    = $packageName
-    unzipLocation = "$toolsDir"
-    url            = $url
-    url64bit       = $url64
-    checksum       = $checksum 
-    checksumType   = 'sha256' 
-    checksum64     = $checksum64
-    checksumType64 = 'sha256'
+    PackageName  = $env:ChocolateyPackageName
+    Destination  = $toolsDir
+    FileFullPath = Join-Path $toolsDir 'QOwnNotes.zip'
 }
 
-Install-ChocolateyZipPackage @packageArgs
+Get-ChocolateyUnzip @packageArgs
 
 Remove-Item $toolsDir\*.zip -ea 0
 
