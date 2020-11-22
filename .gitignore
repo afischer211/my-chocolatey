@@ -4,3 +4,4 @@
 *.bak
 .vscode/
 qownnotes/update.ps1
+*.zip
