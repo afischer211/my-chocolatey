@@ -38,5 +38,6 @@ QOwnNotes is the open source plain-text file notepad with markdown support and t
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
+    <file src="legal\**" target="legal" />
   </files>
 </package>
