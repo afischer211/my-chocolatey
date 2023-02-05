@@ -1,8 +1,12 @@
 ﻿$ErrorActionPreference = 'Stop'
+$packageName    = 'qownnotes'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+$url            = 'https://github.com/pbek/QOwnNotes/releases/download/v23.2.0/QOwnNotes.zip'
+$checksum       = '79323449015713E94FF29D47FEFAA788372E201D5F938436EE185B891AA80466'
+
 
 $packageArgs = @{
-    PackageName  = $env:ChocolateyPackageName
+    PackageName  = $packageName
     Destination  = $toolsDir
     FileFullPath = Join-Path $toolsDir 'QOwnNotes.zip'
 }
