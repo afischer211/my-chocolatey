@@ -1,8 +1,8 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName    = 'qownnotes'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url            = 'https://github.com/pbek/QOwnNotes/releases/download/v24.7.0/QOwnNotes.zip'
-$checksum       = 'A253F432E24248747CA809C956ECEE1389A1B8AF927FD5625A63DADB933D4A55'
+$url            = 'https://github.com/pbek/QOwnNotes/releases/download/v24.7.3/QOwnNotes.zip'
+$checksum       = 'A5FD79729ABDD76E15BF9B94F1BCD6A4E40A248C52BC6E4217831332803BB79C'
 
 
 $packageArgs = @{
