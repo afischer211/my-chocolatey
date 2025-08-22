@@ -122,7 +122,8 @@ jobs:
               Write-Host "Package published successfully!"
               
               # Extract version for tagging
-              $version = (Select-Xml -Path "qownnotes.nuspec" -XPath "//package/metadata/version").Node.InnerText
+              $xml = [xml](Get-Content "qownnotes.nuspec")
+              $version = $xml.package.metadata.version
               echo "package-version=$version" >> $env:GITHUB_OUTPUT
             } else {
               Write-Error "No nupkg file was generated"
