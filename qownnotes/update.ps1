@@ -3,12 +3,15 @@ Import-Module AU
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            "(?i)(^\s*File\s*=\s*)(.*)" = "`$1Join-Path `$toolsDir '$($Latest.FileName32)'"
-            "(?i)(^.*version\s*=\s*)('.*')" = "`$1'$($Latest.Version)'"
+            "(?i)(\\`$url\s*=\s*)('.*')" = "`$1'$($Latest.URL32)'"
+            "(?i)(\\`$checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
         }
         ".\legal\VERIFICATION.txt" = @{
             "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
             "(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
+        }
+        ".\qownnotes.nuspec" = @{
+            "(?i)(^\s*<version>).*(<\/version>)" = "`$1$($Latest.Version)`$2"
         }
 	}
 }
@@ -28,4 +31,4 @@ function global:au_GetLatest {
 	return @{ Version = $version; URL32 = $modurl; PackageName = 'qownnotes'}
 }
 
-Update-Package -ChecksumFor none
+Update-Package -ChecksumFor 32
