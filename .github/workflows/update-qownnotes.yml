@@ -1,0 +1,124 @@
+name: Update QOwnNotes Package
+
+on:
+  schedule:
+    # Run daily at 6:00 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+env:
+  # Package name
+  PACKAGE_NAME: qownnotes
+
+jobs:
+  update-package:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install AU module
+      run: |
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        Install-Module AU -Force -Scope CurrentUser
+        Install-Module chocolatey-au -Force -Scope CurrentUser
+      shell: pwsh
+
+    - name: Install Chocolatey
+      run: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      shell: pwsh
+
+    - name: Configure git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Check for updates
+      id: check_updates
+      run: |
+        cd $env:PACKAGE_NAME
+        $ErrorActionPreference = 'Stop'
+        
+        # Run the update script
+        Write-Host "Running update script for $env:PACKAGE_NAME"
+        .\update.ps1
+        
+        # Check if there are any changes
+        $changes = git status --porcelain
+        if ($changes) {
+            Write-Host "Changes detected:"
+            Write-Host $changes
+            echo "has_changes=true" >> $env:GITHUB_OUTPUT
+            
+            # Get the new version from nuspec file
+            $nuspec = Get-Content "qownnotes.nuspec" -Raw
+            $version = ($nuspec | Select-String '<version>(.*)</version>').Matches[0].Groups[1].Value
+            echo "new_version=$version" >> $env:GITHUB_OUTPUT
+            Write-Host "New version: $version"
+        } else {
+            Write-Host "No changes detected"
+            echo "has_changes=false" >> $env:GITHUB_OUTPUT
+        }
+      shell: pwsh
+
+    - name: Build package
+      if: steps.check_updates.outputs.has_changes == 'true'
+      run: |
+        cd $env:PACKAGE_NAME
+        choco pack qownnotes.nuspec
+      shell: pwsh
+
+    - name: Test package install (optional validation)
+      if: steps.check_updates.outputs.has_changes == 'true'
+      run: |
+        cd $env:PACKAGE_NAME
+        $nupkg = Get-ChildItem -Filter "*.nupkg" | Select-Object -First 1
+        if ($nupkg) {
+          Write-Host "Package built successfully: $($nupkg.Name)"
+          # Test the package metadata
+          choco info $nupkg.FullName
+        }
+      shell: pwsh
+
+    - name: Push to Chocolatey.org
+      if: steps.check_updates.outputs.has_changes == 'true'
+      run: |
+        cd $env:PACKAGE_NAME
+        $nupkg = Get-ChildItem -Filter "*.nupkg" | Select-Object -First 1
+        if ($nupkg -and $env:CHOCOLATEY_API_KEY) {
+          Write-Host "Pushing $($nupkg.Name) to Chocolatey.org"
+          choco push $nupkg.FullName --api-key $env:CHOCOLATEY_API_KEY --source https://push.chocolatey.org/
+        } else {
+          if (-not $nupkg) {
+            Write-Host "::error::No .nupkg file found"
+            exit 1
+          }
+          if (-not $env:CHOCOLATEY_API_KEY) {
+            Write-Host "::error::CHOCOLATEY_API_KEY secret not set"
+            exit 1
+          }
+        }
+      shell: pwsh
+      env:
+        CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+
+    - name: Commit and push changes
+      if: steps.check_updates.outputs.has_changes == 'true'
+      run: |
+        git add .
+        git commit -m "Auto-update $env:PACKAGE_NAME to version ${{ steps.check_updates.outputs.new_version }}"
+        git push
+      shell: pwsh
+
+    - name: Create release tag
+      if: steps.check_updates.outputs.has_changes == 'true'
+      run: |
+        $tag = "$env:PACKAGE_NAME-v${{ steps.check_updates.outputs.new_version }}"
+        git tag $tag
+        git push origin $tag
+        Write-Host "Created tag: $tag"
+      shell: pwsh
