@@ -24,9 +24,15 @@ function global:au_BeforeUpdate() {
 function global:au_GetLatest {
 	$download_page = Invoke-WebRequest -Uri https://github.com/pbek/QOwnNotes/releases/ -UseBasicParsing
 	
-	$url        = $download_page.links | ? href -match '.zip$'| % href | select -First 1
-	$version    = ($url -split '/' | select -Last 1 -Skip 1).trim('v')
-	$modurl     = 'https://github.com' + $url 
+	# Look for release tag links instead of zip files
+	$tag_url    = $download_page.links | ? href -match 'releases/tag/v' | % href | select -First 1
+	
+	if (-not $tag_url) {
+		throw "No release tag found on the releases page"
+	}
+	
+	$version    = ($tag_url -split '/' | select -Last 1).trim('v')
+	$modurl     = "https://github.com/pbek/QOwnNotes/releases/download/v$version/QOwnNotes.zip"
 	
 	return @{ Version = $version; URL32 = $modurl; PackageName = 'qownnotes'}
 }
