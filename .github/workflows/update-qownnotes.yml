@@ -23,7 +23,6 @@ jobs:
         Write-Host "Installing AU module..."
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         Install-Module AU -Force -Scope CurrentUser
-        #Install-Module chocolatey-au -Force -Scope CurrentUser
         # Import the module
         Import-Module AU
         Write-Host "AU module installed and imported successfully"
