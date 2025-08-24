@@ -3,8 +3,8 @@ Import-Module AU
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            "(?i)(\\`$url\s*=\s*)('.*')" = "`$1'$($Latest.URL32)'"
-            "(?i)(\\`$checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
+            "(?i)(\$url\s*=\s*)('.*')" = "`$1'$($Latest.URL32)'"
+            "(?i)(\$checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
         }
         ".\legal\VERIFICATION.txt" = @{
             "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
