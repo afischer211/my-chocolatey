@@ -6,11 +6,24 @@ $url         = 'https://github.com/pbek/QOwnNotes/releases/download/v25.5.3/QOwn
 $checksum    = '607D553520139F538A0815D777EF1D9B99D528FB9BA5A9B657CFC73225F170F0'
 $checksumType = 'sha256'
 
+# First, download the ZIP file
+$zipPath = Join-Path $toolsDir 'QOwnNotes.zip'
 
+$downloadArgs = @{
+    PackageName   = $packageName
+    FileFullPath  = $zipPath
+    Url           = $url
+    Checksum      = $checksum
+    ChecksumType  = $checksumType
+}
+
+Get-ChocolateyWebFile @downloadArgs
+
+# Then extract the ZIP file
 $packageArgs = @{
     PackageName  = $packageName
     Destination  = $toolsDir
-    FileFullPath = Join-Path $toolsDir 'QOwnNotes.zip'
+    FileFullPath = $zipPath
 }
 
 Get-ChocolateyUnzip @packageArgs
