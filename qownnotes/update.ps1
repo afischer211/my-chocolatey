@@ -4,7 +4,7 @@ function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
             "(\`$url\s+=\s+').*(')" = "`${1}$($Latest.URL32)`$2"
-            "(\`$checksum\s+=\s+')[0-9A-Fa-f]+(')" = "`${1}$($Latest.Checksum32)`$2"
+            "(\`$checksum\s+=\s+')[0-9A-Fa-f]{64}(')" = "`${1}$($Latest.Checksum32)`$2"
         }
         ".\legal\VERIFICATION.txt" = @{
             "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
