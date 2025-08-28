@@ -3,16 +3,16 @@ Import-Module AU
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            '(.*url\s*=\s*).*$' = "`$1'$($Latest.URL32)'"
-			'(?i)(.*checksum\s*=\s*).*$' = "`$1'$($Latest.Checksum32)'"
-            '(?i)(.*version\s*=\s*).*$'  = "`$1'$($Latest.Version)'"
+            '(.*url\s*=\s*).*$' = "`$`$1'$($Latest.URL32)'"
+			'(?i)(.*checksum\s*=\s*).*$' = "`$`$1'$($Latest.Checksum32)'"
+            '(?i)(.*version\s*=\s*).*$'  = "`$`$1'$($Latest.Version)'"
         }
         ".\legal\VERIFICATION.txt" = @{
-            "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
-            "(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
+            "(?i)(\s+x32:).*"            = "`$`$1 $($Latest.URL32)"
+            "(?i)(checksum32:).*"        = "`$`$1 $($Latest.Checksum32)"
         }
         ".\qownnotes.nuspec" = @{
-            '(?i)(<version>).*(<\/version>)' = "`$1$($Latest.Version)`$2"
+            '(?i)(<version>).*(<\/version>)' = "`$`$1$($Latest.Version)`$`$2"
         }
 	}
 }
