@@ -3,16 +3,17 @@ Import-Module Chocolatey-AU
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            '(.*url\s*=\s*).*$' = "`$1'$($Latest.URL32)'"
-			'(?i)(.*checksum\s*=\s*).*$' = "`$1'$($Latest.Checksum32)'"
-            '(?i)(.*version\s*=\s*).*$'  = "`$1'$($Latest.Version)'"
+            "(?i)(^\s*(\$)url\s*=\s*)('.*')"  = "`$1'$($Latest.URL32)'"
+            "(?i)(^\s*checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
+            "(?i)(^\s*checksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType32)'"
+            "(?i)(^\s*version\s*=\s*)('.*')"  = "`$1'$($Latest.Version)'"
         }
         ".\legal\VERIFICATION.txt" = @{
             "(?i)(\s+x32:).*"            = "`$1 $($Latest.URL32)"
             "(?i)(checksum32:).*"        = "`$1 $($Latest.Checksum32)"
         }
         ".\qownnotes.nuspec" = @{
-            '(?i)(<version>).*(<\/version>)' = "`$1$($Latest.Version)`$2"
+            "(\<version\>).*?(\</version\>)" = "`$1$($Latest.Version)`$2"
         }
 	}
 }
@@ -58,13 +59,18 @@ function global:au_GetLatest {
 		$download_url = $zipAsset.browser_download_url
 		Write-Host "Found ZIP asset: $($zipAsset.name)"
 		Write-Host "Download URL: $download_url"
+        Write-Host "Version: $version"
+        Write-Host "Checksum: $($zipAsset.sha256)"
+        $checksum = $zipAsset.sha256
+        Write-Host "Checksum: $checksum"
+
 	} else {
 		# Fallback: assume standard naming convention
 		$download_url = "https://github.com/pbek/QOwnNotes/releases/download/v$version/QOwnNotes.zip"
 		Write-Host "No ZIP asset found in API response, trying standard URL: $download_url"
 	}
 	
-	return @{ Version = $version; URL32 = $download_url; PackageName = 'qownnotes'}
+	return @{ Version = $version; URL32 = $download_url; PackageName = 'qownnotes'; Checksum32 = $checksum; ChecksumType32 = 'sha256'}
 }
 
 Update-Package -ChecksumFor 32
