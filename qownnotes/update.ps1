@@ -1,19 +1,21 @@
 Import-Module Chocolatey-AU
 
 function global:au_SearchReplace {
+	$cleanVersion = $($Latest.Version) -replace '\.'
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            "(?i)^(\s*url\s*=\s*)'.*'" = "`${1}'$($Latest.URL32)'"
-            "(?i)^(\s*checksum\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum32)'"
-            "(?i)^(\s*checksumType\s*=\s*)'.*'" = "`${1}'$($Latest.ChecksumType32)'"
-            "(?i)^(\s*version\s*=\s*)'.*'"  = "`${1}'$($Latest.Version)'"
+            "(?i)(\s*url\s*=\s*)'.*'" = "`${1}'$($Latest.URL32)'"
+            "(?i)(\s*checksumType\s*=\s*)'.*'" = "`${1}'$($Latest.ChecksumType32)'"
+			"(?i)(\s*checksum\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum32)'"
+            "(?i)(\s*version\s*=\s*)'.*'"  = "`${1}'$($Latest.Version)'"
         }
         ".\legal\VERIFICATION.txt" = @{
             "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
-            "(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
+			"(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
         }
         ".\qownnotes.nuspec" = @{
             "(\<version\>).*?(\</version\>)" = "`${1}$($Latest.Version)`$2"
+			"(\<releaseNotes\>https://github.com/pbek/QOwnNotes/blob/develop/CHANGELOG.md\#).*?(\</releaseNotes\>)" = "`${1}$($cleanVersion)`$2"
         }
 	}
 }
@@ -21,7 +23,6 @@ function global:au_SearchReplace {
 function global:au_BeforeUpdate() {
 	Get-RemoteFiles -Purge -NoSuffix 
 }
-
 
 function global:au_GetLatest {
 	# Use GitHub API to get the latest release and its assets
@@ -42,7 +43,7 @@ function global:au_GetLatest {
 		$version = ($tag_url -split '/' | select -Last 1).trim('v')
 		$modurl = "https://github.com/pbek/QOwnNotes/releases/download/v$version/QOwnNotes.zip"
 		
-		return @{ Version = $version; URL32 = $modurl; PackageName = 'qownnotes'}
+		return @{ Version = $version; URL32 = $modurl; PackageName = 'qownnotes'; ChecksumType32 = 'sha256'}
 	}
 	
 	$version = $release.tag_name.TrimStart('v')
@@ -70,7 +71,7 @@ function global:au_GetLatest {
 		Write-Host "No ZIP asset found in API response, trying standard URL: $download_url"
 	}
 	
-	return @{ Version = $version; URL32 = $download_url; PackageName = 'qownnotes'; Checksum32 = $checksum; ChecksumType32 = 'sha256'}
+	return @{ Version = $version; URL32 = $download_url; PackageName = 'qownnotes'; ChecksumType32 = 'sha256'}
 }
 
-Update-Package -ChecksumFor 32
+Update-Package -ChecksumFor none
