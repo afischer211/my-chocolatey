@@ -3,17 +3,17 @@ Import-Module Chocolatey-AU
 function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
-            "(?i)(\s*(\$)url\s*=\s*)('.*')"  = "`$1'$($Latest.URL32)'"
-            "(?i)(\s*checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
-            "(?i)(\s*checksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType32)'"
-            "(?i)(\s*version\s*=\s*)('.*')"  = "`$1'$($Latest.Version)'"
+            "(?i)^(\s*url\s*=\s*)'.*'" = "`${1}'$($Latest.URL32)'"
+            "(?i)^(\s*checksum\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum32)'"
+            "(?i)^(\s*checksumType\s*=\s*)'.*'" = "`${1}'$($Latest.ChecksumType32)'"
+            "(?i)^(\s*version\s*=\s*)'.*'"  = "`${1}'$($Latest.Version)'"
         }
         ".\legal\VERIFICATION.txt" = @{
-            "(?i)(\s+x32:).*"            = "`$1 $($Latest.URL32)"
-            "(?i)(checksum32:).*"        = "`$1 $($Latest.Checksum32)"
+            "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
+            "(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
         }
         ".\qownnotes.nuspec" = @{
-            "(\<version\>).*?(\</version\>)" = "`$1$($Latest.Version)`$2"
+            "(\<version\>).*?(\</version\>)" = "`${1}$($Latest.Version)`$2"
         }
 	}
 }
