@@ -19,7 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup PowerShell modules and Chocolatey
-        shell: powershell
+        shell: pwsh
         run: |
           # Install Chocolatey-AU (Automatic Updater) module for Chocolatey packages
           Write-Host "Installing Chocolatey-AU module..."
@@ -43,7 +43,7 @@ jobs:
           choco --version
 
       - name: Update QOwnNotes package
-        shell: powershell
+        shell: pwsh
         working-directory: qownnotes
         run: |
           Write-Host "Starting QOwnNotes package update check..."
@@ -64,7 +64,7 @@ jobs:
 
       - name: Check for changes
         id: check-changes
-        shell: powershell
+        shell: pwsh
         run: |
           # Check if there are any changes to commit
           $changes = git status --porcelain
@@ -79,7 +79,7 @@ jobs:
 
       - name: Configure git
         if: steps.check-changes.outputs.has-changes == 'true'
-        shell: powershell
+        shell: pwsh
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -87,7 +87,7 @@ jobs:
       - name: Build and publish package
         id: build-and-publish
         if: steps.check-changes.outputs.has-changes == 'true'
-        shell: powershell
+        shell: pwsh
         working-directory: qownnotes
         env:
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
@@ -137,7 +137,7 @@ jobs:
 
       - name: Commit changes and create tag
         if: steps.check-changes.outputs.has-changes == 'true'
-        shell: powershell
+        shell: pwsh
         run: |
           # Commit the changes
           git add .
@@ -154,7 +154,7 @@ jobs:
           Write-Host "Changes committed and tagged as $tagName"
 
       - name: Summary
-        shell: powershell
+        shell: pwsh
         run: |
           if ("${{ steps.check-changes.outputs.has-changes }}" -eq "true") {
             Write-Host "✅ Update found, package built and published to chocolatey.org"
