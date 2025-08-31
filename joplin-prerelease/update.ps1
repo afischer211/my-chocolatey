@@ -41,16 +41,13 @@ function Get-GHRelease {
 
     if (-not $Prerelease) {
         $u = "https://api.github.com/repos/$Repo/releases/latest"
-        $resp = Invoke-WebRequest -Uri $u -Headers $headers
-		
-		#Write-Host "Response: $resp"
+        $resp = Invoke-WebRequest -Uri $u -Headers $headers		
         return ($resp.Content | ConvertFrom-Json)
     }
 
     for ($page=1; $page -le $MaxPages; $page++) {
         $u = "https://api.github.com/repos/$Repo/releases?per_page=100&page=$page"
         $resp = Invoke-WebRequest -Uri $u -Headers $headers
-		#Write-Host "Response: $resp"
         $releases = $resp.Content | ConvertFrom-Json
         if (-not $releases) { break }
 
@@ -69,7 +66,6 @@ function global:au_GetLatest {
     #$token = $env:GITHUB_TOKEN      # set to avoid rate limits (recommended)
 
     $r = Get-GHRelease -Repo $repo -Prerelease -Token $token
-	Write-Host "release: $r"
     if (-not $r) { $r = Get-GHRelease -Repo $repo -Token $token }  # fallback to stable
     if (-not $r) { throw "No release found for $repo." }
 
@@ -85,14 +81,12 @@ function global:au_GetLatest {
     if (-not $asset64) { $asset64 = $r.assets | Where-Object { $_.browser_download_url -match '\.(exe)$' } | Select-Object -First 1 }
 
 	$download_url=$asset64.browser_download_url
-	#Write-Host "asset64: $asset64"
 	Write-Host "url: $download_url"
 	Write-Host "version: $version"
 	
     @{
         Version      = $version
         URL64        = $asset64.browser_download_url
-        #URL32        = $asset32.browser_download_url
         ReleaseNotes = $r.html_url
     }
 	
