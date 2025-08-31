@@ -1,0 +1,168 @@
+---
+name: Update Joplin Package
+
+on:
+  schedule:
+    # Run daily at 6:30 AM UTC to check for new Joplin releases
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+    # Allow manual triggering of the workflow
+
+jobs:
+  update-joplin:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PowerShell modules and Chocolatey
+        shell: powershell
+        run: |
+          # Install Chocolatey-AU (Automatic Updater) module for Chocolatey packages
+          Write-Host "Installing Chocolatey-AU module..."
+          Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+          Install-Module -Name Chocolatey-AU -Force -Scope CurrentUser
+
+          # Install Chocolatey if not present
+          Write-Host "Setting up Chocolatey..."
+          if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+            iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          }
+
+          # Import the module
+          Import-Module Chocolatey-AU
+          Write-Host "Chocolatey-AU module installed and imported successfully"
+          
+          # Show Chocolatey-AU and Chocolatey versions for debugging
+          Get-Module Chocolatey-AU | Format-List Name, Version
+          choco --version
+
+      - name: Update Joplin package
+        shell: powershell
+        working-directory: joplin
+        run: |
+          Write-Host "Starting Joplin package update check..."
+
+          # Set error action preference
+          $ErrorActionPreference = 'Stop'
+
+          try {
+            # Run the update script
+            if ($env:au_Force -eq 'true') {
+              $au_Force = $true; .\update.ps1
+            } else {
+              .\update.ps1
+            }
+            Write-Host "Update check completed successfully"
+          }
+          catch {
+            Write-Host "Error during update: $($_.Exception.Message)"
+            throw
+          }
+
+      - name: Check for changes
+        id: check-changes
+        shell: powershell
+        run: |
+          # Check if there are any changes to commit
+          $changes = git status --porcelain
+          if ($changes) {
+            Write-Host "Changes detected:"
+            Write-Host $changes
+            echo "has-changes=true" >> $env:GITHUB_OUTPUT
+          } else {
+            Write-Host "No changes detected"
+            echo "has-changes=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Configure git
+        if: steps.check-changes.outputs.has-changes == 'true'
+        shell: powershell
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Build and publish package
+        id: build-and-publish
+        if: steps.check-changes.outputs.has-changes == 'true'
+        shell: powershell
+        working-directory: joplin
+        env:
+          CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+        run: |
+          Write-Host "Building Chocolatey package..."
+          
+          # Check if API key is configured
+          if ([string]::IsNullOrEmpty($env:CHOCOLATEY_API_KEY)) {
+            Write-Error "CHOCOLATEY_API_KEY secret is not configured. Please add it to repository secrets."
+            exit 1
+          }
+
+          try {
+            # Build the package
+            Write-Host "Running choco pack..."
+            choco pack joplin.nuspec
+
+            # Find the generated nupkg file
+            $nupkgFile = Get-ChildItem -Filter "*.nupkg" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+            
+            if ($nupkgFile) {
+              Write-Host "Package built successfully: $($nupkgFile.Name)"
+              
+              # Validate the package (this will catch basic issues)
+              Write-Host "Validating package..."
+              choco install $nupkgFile.FullName --confirm --what-if
+              
+              # Push to chocolatey.org
+              Write-Host "Publishing package to chocolatey.org..."
+              choco push $nupkgFile.FullName --api-key $env:CHOCOLATEY_API_KEY --source https://push.chocolatey.org/
+              
+              Write-Host "Package published successfully!"
+              
+              # Extract version for tagging
+              $xml = [xml](Get-Content "joplin.nuspec")
+              $version = $xml.package.metadata.version
+              echo "package-version=$version" >> $env:GITHUB_OUTPUT
+            } else {
+              Write-Error "No nupkg file was generated"
+              exit 1
+            }
+          }
+          catch {
+            Write-Error "Failed to build or publish package: $($_.Exception.Message)"
+            exit 1
+          }
+
+      - name: Commit changes and create tag
+        if: steps.check-changes.outputs.has-changes == 'true'
+        shell: powershell
+        run: |
+          # Commit the changes
+          git add .
+          git commit -m "Update Joplin package to version ${{ steps.build-and-publish.outputs.package-version }}"
+          
+          # Create version tag
+          $tagName = "joplin-v${{ steps.build-and-publish.outputs.package-version }}"
+          git tag $tagName
+          
+          # Push changes and tag
+          git push origin HEAD
+          git push origin $tagName
+          
+          Write-Host "Changes committed and tagged as $tagName"
+
+      - name: Summary
+        shell: powershell
+        run: |
+          if ("${{ steps.check-changes.outputs.has-changes }}" -eq "true") {
+            Write-Host "✅ Update found, package built and published to chocolatey.org"
+            Write-Host "📦 Version: ${{ steps.build-and-publish.outputs.package-version }}"
+            Write-Host "🏷️ Tagged as: joplin-v${{ steps.build-and-publish.outputs.package-version }}"
+          } else {
+            Write-Host "ℹ️ No updates available - Joplin package is up to date"
+          }
