@@ -8,7 +8,7 @@ $installerFileName     = 'Joplin-Setup-' + $version + '.exe'
 $file          = Join-Path $toolsDir $installerFileName
 $installerType = 'exe'
 $packageName   = 'joplin-prerelease'
-$url 		   = 'https://github.com/laurent22/joplin/releases/download/v3.4.7/Joplin-Setup-3.4.7.exe' + $installerFileName
+$url 		   = 'https://github.com/laurent22/joplin/releases/download/v3.4.7/Joplin-Setup-3.4.7.exe'
 $checksum      = 'F9AF0752B60DD85D738625EF4C19477B63590C12CF1C32868F9396C5C286D6FD'
 $checksumType  = 'sha256'
 
