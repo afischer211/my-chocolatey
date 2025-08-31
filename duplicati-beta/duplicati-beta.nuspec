@@ -2,7 +2,7 @@
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>duplicati</id>
+    <id>duplicati-beta</id>
     <version>2.0.7.1-beta</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/duplicati</packageSourceUrl>	
     <owners>afischer211</owners>
