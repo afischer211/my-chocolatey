@@ -8,8 +8,8 @@
         <owners>foo.li systeme + software,afischer211</owners>
         <licenseUrl>https://github.com/laurent22/joplin/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://joplinapp.org/</projectUrl>
-        <iconUrl>https://raw.githubusercontent.com/afischer211/chocolatey/master/icons/joplin.png</iconUrl>
-        <packageSourceUrl>https://github.com/afischer211/chocolatey/tree/master/packages/joplin</packageSourceUrl>
+        <iconUrl>https://raw.githubusercontent.com/afischer211/my-chocolatey/master/icons/joplin.png</iconUrl>
+        <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/joplin</packageSourceUrl>
         <docsUrl>https://joplinapp.org/</docsUrl>
         <projectSourceUrl>https://github.com/laurent22/joplin</projectSourceUrl>
         <mailingListUrl>https://discourse.joplinapp.org/</mailingListUrl>
