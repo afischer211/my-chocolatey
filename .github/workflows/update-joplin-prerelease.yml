@@ -106,7 +106,7 @@ jobs:
           try {
             # Build the package
             Write-Host "Running choco pack..."
-            choco pack joplin-prerelease.nuspec
+            choco pack joplin.nuspec
 
             # Find the generated nupkg file
             $nupkgFile = Get-ChildItem -Filter "*.nupkg" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
@@ -125,7 +125,7 @@ jobs:
               Write-Host "Package published successfully!"
               
               # Extract version for tagging
-              $xml = [xml](Get-Content "joplin-prerelease.nuspec")
+              $xml = [xml](Get-Content "joplin.nuspec")
               $version = $xml.package.metadata.version
               echo "package-version=$version" >> $env:GITHUB_OUTPUT
             } else {
