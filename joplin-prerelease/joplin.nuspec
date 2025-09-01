@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>joplin-prerelease</id>
+        <id>joplin</id>
         <version>3.4.7</version>
-        <title>Joplin-Prerelease</title>
+        <title>Joplin (Prerelease)</title>
         <authors>Laurent Cozic</authors>
         <owners>foo.li systeme + software,afischer211</owners>
         <licenseUrl>https://github.com/laurent22/joplin/blob/master/LICENSE</licenseUrl>
@@ -19,7 +19,7 @@
         <releaseNotes>https://github.com/laurent22/joplin/releases/tag/v3.4.7</releaseNotes>
         <copyright>https://joplinapp.org/</copyright>
         <language />
-        <tags>notes todo admin</tags>
+        <tags>notes todo markdown</tags>
     </metadata>
     <files>
         <file src="tools\*.ps1" target="tools" />
