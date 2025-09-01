@@ -90,7 +90,7 @@ function global:au_GetLatest {
         ReleaseNotes = $r.html_url
     }
 	
-    return @{ Version = $version; URL64 = $download_url; PackageName = 'joplin-prerelease'; ChecksumType64 = 'sha256'; }
+    return @{ Version = $version; URL64 = $download_url; PackageName = 'joplin'; ChecksumType64 = 'sha256'; }
 }
 
 Update-Package -ChecksumFor none
