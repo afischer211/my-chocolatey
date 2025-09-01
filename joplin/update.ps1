@@ -4,12 +4,13 @@ function global:au_SearchReplace {
     @{
         ".\tools\chocolateyInstall.ps1" = @{
 #            "(?i)(^\s*file\s*=\s*)(.*)" = "`$1Join-Path `$toolsDir '$($Latest.FileName32)'"
-            "(?i)(^.*version\s*=\s*)('.*')"  = "`$1'$($Latest.Version)'"
-			"(?i)(^.*checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
+            "(?i)(\s*version\s*=\s*)('.*')"  = "`$1'$($Latest.Version)'"
+			"(?i)(\s*checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum64)'"
+            "(?i)(\s*url\s*=\s*)('.*')"   = "`$1'$($Latest.URL64)'"
         }
         ".\legal\VERIFICATION.txt" = @{
-            "(?i)(\s+x32:).*"            = "`${1} $($Latest.URL32)"
-            "(?i)(checksum32:).*"        = "`${1} $($Latest.Checksum32)"
+            "(?i)(\s+x64:).*"            = "`${1} $($Latest.URL64)"
+            "(?i)(checksum64:).*"        = "`${1} $($Latest.Checksum64)"
         }
         ".\joplin.nuspec" = @{
             "(?i)(<version>).*?(</version>)" = "`${1}$($Latest.Version)`${2}"
@@ -22,19 +23,74 @@ function global:au_BeforeUpdate() {
 	Get-RemoteFiles -Purge -NoSuffix
 }
 
+# --- Helper: fetch a GitHub release (pre-release or stable) via Invoke-WebRequest ---
+function Get-GHRelease {
+    param(
+        [Parameter(Mandatory=$true)][string]$Repo,      # "owner/repo"
+        [switch]$Prerelease,                            # latest prerelease if set
+        [string]$Token,                                 # optional: $env:GITHUB_TOKEN
+        [int]$MaxPages = 3                              # paginate just in case
+    )
 
+    $headers = @{
+        "User-Agent"           = "choco-au-script"
+        "Accept"               = "application/vnd.github+json"
+        "X-GitHub-Api-Version" = "2022-11-28"
+    }
+    if ($Token) { $headers["Authorization"] = "token $Token" }
+
+    if (-not $Prerelease) {
+        $u = "https://api.github.com/repos/$Repo/releases/latest"
+        $resp = Invoke-WebRequest -Uri $u -Headers $headers		
+        return ($resp.Content | ConvertFrom-Json)
+    }
+
+    for ($page=1; $page -le $MaxPages; $page++) {
+        $u = "https://api.github.com/repos/$Repo/releases?per_page=100&page=$page"
+        $resp = Invoke-WebRequest -Uri $u -Headers $headers
+        $releases = $resp.Content | ConvertFrom-Json
+        if (-not $releases) { break }
+
+        $cand = $releases |
+            Where-Object { $_.prerelease -eq $true -and $_.draft -eq $false } |
+            Sort-Object {[datetime]$_.published_at} -Descending
+
+        if ($cand) { return $cand[0] }
+    }
+    return $null
+}
+
+# --- AU hook: build Latest from GH prerelease (fallback to stable if none) ---
 function global:au_GetLatest {
-	# Get latest release information from GitHub
-	$gh_latest_page	= Invoke-WebRequest -Uri https://api.github.com/repos/laurent22/joplin/releases/latest -UseBasicParsing | ConvertFrom-Json
+    $repo = 'laurent22/joplin'
+    #$token = $env:GITHUB_TOKEN      # set to avoid rate limits (recommended)
 
-	# Get version
-	$version	= $gh_latest_page.name.trim('v')
+    $r = Get-GHRelease -Repo $repo -Token $token
+    if (-not $r) { $r = Get-GHRelease -Repo $repo -Token $token }  # fallback to stable
+    if (-not $r) { throw "No release found for $repo." }
 
-	# Get download URL
-	$asset		= $gh_latest_page.assets | Where-Object { $_.name -like 'Joplin-Setup-*.exe' }
-	$url		= $asset.browser_download_url
+    $version = $r.tag_name.TrimStart('v')
+    # Choose assets by regex (adjust to your project):
+    $re64 = 'Joplin-Setup.*\.(exe)$'
+    #$re32 = 'Joplin-Setup.*(x86|ia32|32).*\.(msi|exe|zip)$'
 
-	return @{ Version = $version; URL32 = $url; PackageName = 'joplin'}
+    $asset64 = $r.assets | Where-Object name -match $re64 | Select-Object -First 1
+    #$asset32 = $r.assets | Where-Object name -match $re32 | Select-Object -First 1
+
+    # Fallback: if only one universal asset exists, use it for URL64
+    if (-not $asset64) { $asset64 = $r.assets | Where-Object { $_.browser_download_url -match '\.(exe)$' } | Select-Object -First 1 }
+
+	$download_url=$asset64.browser_download_url
+	Write-Host "url: $download_url"
+	Write-Host "version: $version"
+	
+    @{
+        Version      = $version
+        URL64        = $asset64.browser_download_url
+        ReleaseNotes = $r.html_url
+    }
+	
+    return @{ Version = $version; URL64 = $download_url; PackageName = 'joplin'; ChecksumType64 = 'sha256'; }
 }
 
 Update-Package -ChecksumFor none
