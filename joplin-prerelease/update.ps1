@@ -12,8 +12,8 @@ function global:au_SearchReplace {
             "(?i)(\s+x64:).*"            = "`${1} $($Latest.URL64)"
             "(?i)(checksum64:).*"        = "`${1} $($Latest.Checksum64)"
         }
-        ".\joplin-prerelease.nuspec" = @{
-            "(?i)(<version>).*?(</version>)" = "`${1}$($Latest.Version)`${2}"
+        ".\joplin.nuspec" = @{
+            "(?i)(<version>).*?(</version>)" = "`${1}$($Latest.Version)-prerelease`${2}"
             "(?i)(<releaseNotes>https://github.com/laurent22/joplin/releases/tag/v).*?(</releaseNotes>)" = "`${1}$($Latest.Version)`${2}"
         }
 	}
