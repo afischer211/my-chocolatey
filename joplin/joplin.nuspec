@@ -19,7 +19,7 @@
         <releaseNotes>https://github.com/laurent22/joplin/releases/tag/v3.4.6</releaseNotes>
         <copyright>https://joplinapp.org/</copyright>
         <language />
-        <tags>notes todo admin</tags>
+        <tags>notes todo markdown</tags>
     </metadata>
     <files>
         <file src="tools\*.ps1" target="tools" />
