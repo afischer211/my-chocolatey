@@ -2,9 +2,6 @@
 name: Update Joplin Prerelease Package
 
 on:
-  schedule:
-    # Run daily at 7:30 AM UTC to check for new Joplin prerelease versions
-    - cron: '30 7 * * *'
   workflow_dispatch:
     # Allow manual triggering of the workflow
 
