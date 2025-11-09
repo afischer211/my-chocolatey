@@ -1,5 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName    = 'duplicati'
+$version        = '2.0.5.1'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url            = 'https://github.com/duplicati/duplicati/releases/download/v2.0.5.1-2.0.5.1_beta_2020-01-18/duplicati-2.0.5.1_beta_2020-01-18-x86.msi' 
 $checksum       = 'BF533D5E196B985DFF5BE4C443FA97BE8A1594A8ABB0F9758A9329F39BF5686F'
