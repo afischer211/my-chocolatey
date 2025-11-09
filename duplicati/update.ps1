@@ -1,5 +1,22 @@
 Import-Module Chocolatey-AU
 
+function global:au_SearchReplace {
+	$cleanVersion = $($Latest.Version) -replace '\.'
+    @{
+        ".\tools\chocolateyInstall.ps1" = @{
+            "(?i)(\s*url\s*=\s*)'.*'" = "`${1}'$($Latest.URL32)'"
+            "(?i)(\s*url64\s*=\s*)'.*'" = "`${1}'$($Latest.URL64)'"
+            "(?i)(\s*checksumType\s*=\s*)'.*'" = "`${1}'$($Latest.ChecksumType32)'"
+            "(?i)(\s*checksumType64\s*=\s*)'.*'" = "`${1}'$($Latest.ChecksumType64)'"
+			"(?i)(\s*checksum\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum32)'"
+			"(?i)(\s*checksum64\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum64)'"
+            "(?i)(\s*version\s*=\s*)'.*'"  = "`${1}'$($Latest.Version)'"
+        }
+        ".\duplicati.nuspec" = @{
+            "(\<version\>).*?(\</version\>)" = "`${1}$($Latest.Version)`$2"
+        }
+	}
+}
 
 function global:au_BeforeUpdate() {
 	Get-RemoteFiles -Purge -NoSuffix 
@@ -22,13 +39,14 @@ function global:au_GetLatest {
 		}
 		
 		$version = ($tag_url -split '/' | select -Last 1).trim('v')
-		$modurl = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.zip"
+		$modurl32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.zip"
+		$modurl64 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.zip"
 		
 		$cleanVersion = $version -replace '_stable.*'
 		
 		Write-Host "Version: $version"
         Write-Host "CleanVersion: $cleanVersion"	
-		return @{ Version = $cleanVersion; URL32 = $modurl; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; LongVersion = $version}
+		return @{ Version = $cleanVersion; URL32 = $modurl32; URL64 = $modurl64; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
 	}
 	
 	$version = $release.tag_name.TrimStart('v')
@@ -52,7 +70,9 @@ function global:au_GetLatest {
 		Write-Host "No ZIP asset found in API response, trying standard URL: $download_url"
 	}
 	
-	return @{ Version = $cleanVersion; URL32 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; LongVersion = $version}
+	$download_url32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.zip"
+
+	return @{ Version = $cleanVersion; URL32 = $download_url32; URL64 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
 }
 
 Update-Package -ChecksumFor none
