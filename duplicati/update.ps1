@@ -1,5 +1,7 @@
 Import-Module Chocolatey-AU
 
+$NoCheckChocoVersion = $true
+
 function global:au_SearchReplace {
 	$cleanVersion = $($Latest.Version) -replace '\.'
     @{
