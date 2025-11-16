@@ -157,6 +157,9 @@ jobs:
           
           # Create version tag
           $tagName = "duplicati-v${{ steps.build-and-publish.outputs.package-version }}"
+          
+          git tag -d $tagName
+          git push --delete origin $tagName
           git tag $tagName
           
           # Push changes and tag
