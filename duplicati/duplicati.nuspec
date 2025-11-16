@@ -3,14 +3,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>duplicati</id>
-    <version>2.2.0.1</version>
+    <version>2.0.0.0</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/duplicati</packageSourceUrl>	
     <owners>bcurran3,afischer211</owners>
     <title>Duplicati (Install)</title>
     <authors>Kenneth Skovhede and Rene Stach</authors>
     <projectUrl>http://www.duplicati.com/</projectUrl>
     <iconUrl>http://www.duplicati.com/images/duplicati-fb-share-v1.png</iconUrl>
-    <licenseUrl>https://github.com/duplicati/duplicati/blob/master/LICENSE.txt</licenseUrl>
+    <licenseUrl>https://github.com/duplicati/duplicati/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/duplicati/duplicati</projectSourceUrl>
     <docsUrl>https://github.com/duplicati/duplicati/wiki</docsUrl>
