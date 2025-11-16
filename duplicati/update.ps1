@@ -12,6 +12,10 @@ function global:au_SearchReplace {
 			"(?i)(\s*checksum64\s*=\s*)'.*'" = "`${1}'$($Latest.Checksum64)'"
             "(?i)(\s*version\s*=\s*)'.*'"  = "`${1}'$($Latest.Version)'"
         }
+		".\legal\VERIFICATION.txt" = @{
+            "(?i)(\s+x64:).*"            = "`${1} $($Latest.URL64)"
+			"(?i)(checksum64:).*"        = "`${1} $($Latest.Checksum64)"
+        }
         ".\duplicati.nuspec" = @{
             "(\<version\>).*?(\</version\>)" = "`${1}$($Latest.Version)`$2"
         }
