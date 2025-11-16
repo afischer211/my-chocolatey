@@ -81,4 +81,4 @@ function global:au_GetLatest {
 	return @{ Version = $cleanVersion; URL32 = $download_url32; URL64 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
 }
 
-Update-Package -ChecksumFor none -NoCheckChocoVersion true
+Update-Package -ChecksumFor none -NoCheckChocoVersion
