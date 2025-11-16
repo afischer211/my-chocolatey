@@ -60,6 +60,7 @@ jobs:
 
           try {
             # Run the update script
+            $env:au_NoCheckChocoVersion = 'true'
             if ($env:au_Force -eq 'true') {
               $au_Force = $true; .\update.ps1
             } else {
