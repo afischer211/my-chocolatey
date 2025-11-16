@@ -50,6 +50,7 @@ jobs:
 
           # Set error action preference
           $ErrorActionPreference = 'Stop'
+          $env:au_NoCheckChocoVersion = 'true'
 
           # Check if update.ps1 exists
           if (!(Test-Path "update.ps1")) {
@@ -62,9 +63,9 @@ jobs:
             # Run the update script
             $env:au_NoCheckChocoVersion = 'true'
             if ($env:au_Force -eq 'true') {
-              $au_Force = $true; .\update.ps1
+              $au_Force = $true; .\update.ps1 -NoCheckChocoVersion
             } else {
-              .\update.ps1
+              .\update.ps1 -NoCheckChocoVersion
             }
             Write-Host "Update check completed successfully"
           }
