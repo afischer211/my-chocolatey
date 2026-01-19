@@ -45,8 +45,8 @@ function global:au_GetLatest {
 		}
 		
 		$version = ($tag_url -split '/' | select -Last 1).trim('v')
-		$modurl32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.zip"
-		$modurl64 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.zip"
+		$modurl32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
+		$modurl64 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.msi"
 		
 		$cleanVersion = $version -replace '_stable.*'
 		
@@ -58,25 +58,25 @@ function global:au_GetLatest {
 	$version = $release.tag_name.TrimStart('v')
 	$cleanVersion = $version -replace '_stable.*'
 	
-	# Look for ZIP files in the assets
-	$zipAsset = $release.assets | Where-Object { 
-		$_.name -match "duplicati.*\-win\-x64\-gui\.zip$" -or 
-		$_.name -match ".*win-x64-gui\.zip$"
+	# Look for MSI files in the assets
+	$msiAsset = $release.assets | Where-Object { 
+		$_.name -match "duplicati.*\-win\-x64\-gui\.msi$" -or 
+		$_.name -match ".*win-x64-gui\.msi$"
 	} | Select-Object -First 1
 	
-	if ($zipAsset) {
-		$download_url = $zipAsset.browser_download_url
-		Write-Host "Found ZIP asset: $($zipAsset.name)"
+	if ($msiAsset) {
+		$download_url = $msiAsset.browser_download_url
+		Write-Host "Found MSI asset: $($msiAsset.name)"
 		Write-Host "Download URL: $download_url"
         Write-Host "Version: $version"
         Write-Host "CleanVersion: $cleanVersion"		
 	} else {
 		# Fallback: assume standard naming convention
-		$download_url = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.zip"
-		Write-Host "No ZIP asset found in API response, trying standard URL: $download_url"
+		$download_url = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.msi"
+		Write-Host "No MSI asset found in API response, trying standard URL: $download_url"
 	}
 	
-	$download_url32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.zip"
+	$download_url32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
 
 	return @{ Version = $cleanVersion; URL32 = $download_url32; URL64 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
 }
