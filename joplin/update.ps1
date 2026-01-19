@@ -25,13 +25,12 @@ function global:au_BeforeUpdate() {
 	Get-RemoteFiles -Purge -NoSuffix
 }
 
-# --- Helper: fetch a GitHub release (pre-release or stable) via Invoke-WebRequest ---
 function Get-GHRelease {
     param(
-        [Parameter(Mandatory=$true)][string]$Repo,      # "owner/repo"
-        [switch]$Prerelease,                            # latest prerelease if set
-        [string]$Token,                                 # optional: $env:GITHUB_TOKEN
-        [int]$MaxPages = 3                              # paginate just in case
+        [Parameter(Mandatory=$true)][string]$Repo,
+        [switch]$Prerelease,
+        [string]$Token,
+        [int]$MaxPages = 3
     )
 
     $headers = @{
@@ -39,25 +38,54 @@ function Get-GHRelease {
         "Accept"               = "application/vnd.github+json"
         "X-GitHub-Api-Version" = "2022-11-28"
     }
-    if ($Token) { $headers["Authorization"] = "token $Token" }
-
-    if (-not $Prerelease) {
-        $u = "https://api.github.com/repos/$Repo/releases/latest"
-        $resp = Invoke-WebRequest -Uri $u -Headers $headers		
-        return ($resp.Content | ConvertFrom-Json)
+    
+    # GitHub empfiehlt für GITHUB_TOKEN den Präfix "Bearer"
+    if ($Token) { 
+        $headers["Authorization"] = "Bearer $Token" 
     }
 
-    for ($page=1; $page -le $MaxPages; $page++) {
-        $u = "https://api.github.com/repos/$Repo/releases?per_page=100&page=$page"
-        $resp = Invoke-WebRequest -Uri $u -Headers $headers
-        $releases = $resp.Content | ConvertFrom-Json
-        if (-not $releases) { break }
+    try {
+        if (-not $Prerelease) {
+            $u = "https://api.github.com/repos/$Repo/releases/latest"
+            Write-Host "Fetching latest release from $u..." -ForegroundColor Cyan
+            return Invoke-RestMethod -Uri $u -Headers $headers -ErrorAction Stop
+        }
 
-        $cand = $releases |
-            Where-Object { $_.prerelease -eq $true -and $_.draft -eq $false } |
-            Sort-Object {[datetime]$_.published_at} -Descending
+        # Logik für Prereleases
+        for ($page=1; $page -le $MaxPages; $page++) {
+            $u = "https://api.github.com/repos/$Repo/releases?per_page=100&page=$page"
+            Write-Host "Scanning page $page for prereleases..." -ForegroundColor Cyan
+            
+            $releases = Invoke-RestMethod -Uri $u -Headers $headers -ErrorAction Stop
+            if (-not $releases) { break }
 
-        if ($cand) { return $cand[0] }
+            $cand = $releases | 
+                Where-Object { $_.prerelease -eq $true -and $_.draft -eq $false } | 
+                Sort-Object {[datetime]$_.published_at} -Descending
+
+            if ($cand) { return $cand[0] }
+        }
+    }
+    catch {
+        $msg = $_.Exception.Message
+        # Spezielle Prüfung auf Rate Limit
+        if ($_.Exception.Response) {
+            $resp = $_.Exception.Response
+            $limit = $resp.Headers["X-RateLimit-Limit"]
+            $remaining = $resp.Headers["X-RateLimit-Remaining"]
+            $resetTime = [datetime]::FromFileTime($resp.Headers["X-RateLimit-Reset"]) # Näherungswert
+            
+            Write-Warning "GitHub API Error: $msg"
+            Write-Warning "Rate Limit: $remaining / $limit (Resets around $resetTime)"
+            
+            if ($resp.StatusCode -eq 403 -and $remaining -eq 0) {
+                Write-Error "Rate Limit exceeded! Use a valid GITHUB_TOKEN to increase limits."
+            }
+        }
+        else {
+            Write-Error "Failed to contact GitHub API: $msg"
+        }
+        return $null
     }
     return $null
 }
