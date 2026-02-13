@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>qownnotes</id>
-    <version>26.2.3</version>
+    <version>26.2.4</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/qownnotes</packageSourceUrl>	
     <title>QOwnNotes</title>
     <authors>Patrizio Bekerle (pbek)</authors>
@@ -29,7 +29,7 @@ QOwnNotes is the open source plain-text file notepad with markdown support and t
 * This package does not support Windows XP.
 * This package is based on the work of Patrizio Bekerle (dimqua).
     </description>
-    <releaseNotes>https://github.com/pbek/QOwnNotes/blob/develop/CHANGELOG.md#2623</releaseNotes>
+    <releaseNotes>https://github.com/pbek/QOwnNotes/blob/develop/CHANGELOG.md#2624</releaseNotes>
     <tags>qownnotes notes notepad qt qt5 markdown nextcloud owncloud</tags>
     <projectSourceUrl>https://github.com/pbek/QOwnNotes</projectSourceUrl>
     <iconUrl>https://github.com/pbek/QOwnNotes/blob/develop/icons/icon.png</iconUrl>
