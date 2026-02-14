@@ -51,7 +51,7 @@ jobs:
           # Set error action preference
           $ErrorActionPreference = 'Stop'
           $env:au_NoCheckChocoVersion = $true
-          $env:au_Force = $true
+          $env:au_Force = $false
 
           # Check if update.ps1 exists
           if (!(Test-Path "update.ps1")) {
