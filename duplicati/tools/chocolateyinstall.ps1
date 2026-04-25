@@ -1,11 +1,11 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName    = 'duplicati'
-$version        = '2.3.0.0'
+$version        = '2.3.0.1'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url            = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.0_stable_2026-04-14/duplicati-2.3.0.0_stable_2026-04-14-win-x86-gui.msi' 
-$checksum       = '95814143448EC9B853D32B3788D9DEF8F7D832F7134D3F44DE8C23F19C084A7A'
-$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.0_stable_2026-04-14/duplicati-2.3.0.0_stable_2026-04-14-win-x64-gui.msi' 
-$checksum64     = '10C5C7AE056E0635712D51C5A9B6CE806B0BE0C2493986A53B2B4DAE57ABAC66'
+$url            = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.1_stable_2026-04-24/duplicati-2.3.0.1_stable_2026-04-24-win-x86-gui.msi' 
+$checksum       = '63A320B41A0514697EB80AD12DA0B0A3DB644E0ADBFC1106A154A7670A5125C1'
+$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.1_stable_2026-04-24/duplicati-2.3.0.1_stable_2026-04-24-win-x64-gui.msi' 
+$checksum64     = '17FF7B6C9110A81DE6470CDB64BF22DDCEBE1CA903C9022A60E5DEEBA4F541E2'
 
 $packageArgs = @{
   packageName    = $packageName
