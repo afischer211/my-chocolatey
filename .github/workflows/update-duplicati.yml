@@ -151,8 +151,8 @@ jobs:
         if: steps.check-changes.outputs.has-changes == 'true'
         shell: powershell
         run: |
-          # Commit the changes
-          git add .
+          # Commit only the metadata files, not downloaded binaries
+          git add duplicati/duplicati.nuspec duplicati/tools/chocolateyinstall.ps1 duplicati/legal/VERIFICATION.txt
           git commit -m "Update Duplicati package to version ${{ steps.build-and-publish.outputs.package-version }}"
           
           # Create version tag
