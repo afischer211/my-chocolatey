@@ -96,7 +96,6 @@ function global:au_GetLatest {
     $token = $env:GITHUB_TOKEN      # set to avoid rate limits (recommended)
 
     $r = Get-GHRelease -Repo $repo -Token $token
-    if (-not $r) { $r = Get-GHRelease -Repo $repo -Token $token }  # fallback to stable
     if (-not $r) { throw "No release found for $repo." }
 
     $version = $r.tag_name.TrimStart('v')
@@ -113,12 +112,6 @@ function global:au_GetLatest {
 	$download_url=$asset64.browser_download_url
 	Write-Host "url: $download_url"
 	Write-Host "version: $version"
-	
-    @{
-        Version      = $version
-        URL64        = $asset64.browser_download_url
-        ReleaseNotes = $r.html_url
-    }
 	
     return @{ Version = $version; URL64 = $download_url; PackageName = 'joplin'; ChecksumType64 = 'sha256'; }
 }

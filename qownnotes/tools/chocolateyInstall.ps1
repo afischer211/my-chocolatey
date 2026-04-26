@@ -1,6 +1,5 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName = 'qownnotes'
-$fileType    = 'exe'
 $version     = '26.4.22'
 $toolsDir    = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url         = 'https://github.com/pbek/QOwnNotes/releases/download/v26.4.22/QOwnNotes.zip'
