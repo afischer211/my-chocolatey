@@ -1,6 +1,6 @@
 # Adding a new package
 
-This repo has three packages (`duplicati/`, `joplin/`, `qownnotes/`), each with an
+This repo has four packages (`duplicati/`, `duplicati-canary/`, `joplin/`, `qownnotes/`), each with an
 AU-based (`update.ps1`) auto-updater and a near-identical GitHub Actions workflow that
 runs it daily. Use an existing package as your template rather than starting from
 scratch — pick the one closest to what you're packaging.
@@ -18,7 +18,7 @@ Create `<package>/` with:
 
 Copy an existing workflow (e.g. `.github/workflows/update-qownnotes.yml`) to
 `.github/workflows/update-<package>.yml` and adjust:
-- `name:`, job id, and `cron:` schedule — pick a time that doesn't collide with the existing three (`0 6`, `30 6`, `0 7` UTC); leave a gap of at least 15–30 minutes.
+- `name:`, job id, and `cron:` schedule — pick a time that doesn't collide with the existing four (`0 6`, `30 6`, `0 7`, `30 7` UTC); leave a gap of at least 15–30 minutes.
 - `working-directory:` and file paths (`.nuspec`, install script) in every step.
 - The `git add` line in "Commit changes and create tag" — list the exact metadata files your package's `update.ps1` modifies.
 - Keep the `Install-WithRetry` wrapper around `Install-PackageProvider` / `Install-Module -Name Chocolatey-AU` as-is — it exists to absorb transient PowerShell Gallery failures (see [AUTOMATION.md](AUTOMATION.md#transient-powershell-gallery-failures)). Don't drop it when copying.

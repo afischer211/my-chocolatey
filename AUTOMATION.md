@@ -1,7 +1,7 @@
 # Automated Chocolatey Package Updates
 
 This repository uses GitHub Actions to automatically check for new upstream releases and
-publish updated Chocolatey packages. All three packages follow the same workflow pattern;
+publish updated Chocolatey packages. All four packages follow the same workflow pattern;
 this doc covers that shared pattern plus anything package-specific.
 
 ## Schedule
@@ -74,7 +74,7 @@ Ensure the repository has the following permissions enabled:
 
 ## Manual Execution
 
-You can manually trigger any of the three workflows:
+You can manually trigger any of the four workflows:
 
 1. Go to the "Actions" tab in your GitHub repository.
 2. Select "Update Duplicati Package", "Update Duplicati Canary Package", "Update Joplin Package", or "Update QOwnNotes Package".
