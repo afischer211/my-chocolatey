@@ -22,9 +22,37 @@ jobs:
         shell: powershell
         run: |
           # Install Chocolatey-AU (Automatic Updater) module for Chocolatey packages
+          # Retries guard against transient PowerShell Gallery flakiness (observed as a
+          # spurious "No match was found" error even though the module exists and the
+          # identical install succeeds in sibling workflows moments apart).
+          function Install-WithRetry {
+            param(
+              [Parameter(Mandatory)][scriptblock]$Action,
+              [string]$Description,
+              [int]$MaxAttempts = 5
+            )
+            for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+              try {
+                & $Action
+                return
+              }
+              catch {
+                Write-Warning "Attempt $attempt/$MaxAttempts to $Description failed: $($_.Exception.Message)"
+                if ($attempt -eq $MaxAttempts) {
+                  throw
+                }
+                Start-Sleep -Seconds (10 * $attempt)
+              }
+            }
+          }
+
           Write-Host "Installing Chocolatey-AU module..."
-          Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-          Install-Module -Name Chocolatey-AU -Force -Scope CurrentUser
+          Install-WithRetry -Description "install NuGet package provider" -Action {
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -ErrorAction Stop
+          }
+          Install-WithRetry -Description "install Chocolatey-AU module" -Action {
+            Install-Module -Name Chocolatey-AU -Force -Scope CurrentUser -ErrorAction Stop
+          }
 
           # Install Chocolatey if not present
           Write-Host "Setting up Chocolatey..."
