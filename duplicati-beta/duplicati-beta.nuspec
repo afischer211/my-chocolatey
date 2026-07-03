@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if "Ω" doesn't appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>duplicati</id>
+    <version>2.2.1.0-beta</version>
+    <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/duplicati-beta</packageSourceUrl>
+    <owners>bcurran3,afischer211</owners>
+    <title>Duplicati (Install) - Beta</title>
+    <authors>Kenneth Skovhede and Rene Stach</authors>
+    <projectUrl>http://www.duplicati.com/</projectUrl>
+    <iconUrl>http://www.duplicati.com/images/duplicati-fb-share-v1.png</iconUrl>
+    <licenseUrl>https://github.com/duplicati/duplicati/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/duplicati/duplicati</projectSourceUrl>
+    <docsUrl>https://github.com/duplicati/duplicati/wiki</docsUrl>
+    <mailingListUrl>https://groups.google.com/forum/#!forum/duplicati</mailingListUrl>
+    <bugTrackerUrl>https://github.com/duplicati/duplicati/issues</bugTrackerUrl>
+    <tags>duplicati cloud backup admin beta prerelease</tags>
+    <summary>Duplicati - Free backup software to store encrypted backups online. This is the beta channel.</summary>
+    <description><![CDATA[**This is Duplicati's beta channel** - builds promoted from canary for wider testing before they become the next stable release.
+
+* This package publishes prerelease versions of the same `duplicati` package id used by the stable and canary packages. Install it with `choco install duplicati --pre`, or pin an exact version with `choco install duplicati --version 2.2.1.0-beta`.
+* Installing this **replaces** any existing stable or canary Duplicati install - all Duplicati Windows builds share the same MSI upgrade code, so they cannot be installed side by side. To go back to stable, install `duplicati` without `--pre`.
+* v2.x is still considered pre-release/"experimental" (beta) and in active development.
+* This package downloads the installer via a version specific URL. It should never fail unless the version is completely removed from the vendor website.
+* I became a co-maintainer for this package from Bill (bcurran3) and try to refresh this package more frequently. See also the original package-notes under https://github.com/bcurran3/ChocolateyPackages/blob/master/duplicati/readme.md.
+
+***
+
+If applicable, please always consider donating or purchasing the software you installed - including [Chocolatey's licensed editions](https://chocolatey.org/pricing).
+
+<h3>TIA,</h3>
+
+<h3>Alexander</h3>
+]]></description>
+    <releaseNotes>https://github.com/duplicati/duplicati/blob/master/changelog.txt</releaseNotes>
+    <dependencies>
+      <dependency id="vcredist140" />
+      <dependency id="dotnet4.7.2" />
+    </dependencies>
+    </metadata>
+    <files>
+        <file src="tools\*.ps1" target="tools" />
+        <file src="legal\*.txt" target="legal" />
+    </files>
+</package>
