@@ -9,10 +9,11 @@ this doc covers that shared pattern plus anything package-specific.
 | Package | Workflow file | Cron (UTC) |
 |---|---|---|
 | Duplicati | `.github/workflows/update-duplicati.yml` | `0 7 * * *` (7:00 AM) |
+| Duplicati (canary) | `.github/workflows/update-duplicati-canary.yml` | `30 7 * * *` (7:30 AM) |
 | Joplin | `.github/workflows/update-joplin.yml` | `30 6 * * *` (6:30 AM) |
 | QOwnNotes | `.github/workflows/update-qownnotes.yml` | `0 6 * * *` (6:00 AM) |
 
-Schedules are staggered so the three jobs don't compete for the same shared PowerShell
+Schedules are staggered so the four jobs don't compete for the same shared PowerShell
 Gallery / Chocolatey.org resources at once. Each workflow can also be triggered manually
 (see below).
 
@@ -31,6 +32,7 @@ Each workflow:
 ### Tagging behavior differs slightly between workflows
 
 - **Duplicati** deletes the tag both locally and on the remote before recreating it (`git tag -d`, `git push --delete origin`, then `git tag` + `git push origin $tagName`). If the tag doesn't already exist remotely, `git push --delete` will fail — this is only safe because in practice the tag from the previous version always exists once the package has shipped once.
+- **Duplicati (canary)** uses the same delete-and-recreate strategy as stable Duplicati, tagging as `duplicati-canary-v<version>` (distinct from stable's `duplicati-v<version>` tags) so the two are never confused.
 - **Joplin** and **QOwnNotes** instead force-move the tag (`git tag -f $tagName`, `git push origin $tagName --force`), which works whether or not the tag previously existed.
 
 Neither approach is more "correct" than the other, but be aware of the difference before copying one workflow as a template for a new package — a force-push to a tag is a rewriting operation and will silently overwrite history if the tag is ever reused for something else.
@@ -75,7 +77,7 @@ Ensure the repository has the following permissions enabled:
 You can manually trigger any of the three workflows:
 
 1. Go to the "Actions" tab in your GitHub repository.
-2. Select "Update Duplicati Package", "Update Joplin Package", or "Update QOwnNotes Package".
+2. Select "Update Duplicati Package", "Update Duplicati Canary Package", "Update Joplin Package", or "Update QOwnNotes Package".
 3. Click "Run workflow".
 4. Choose the branch and click "Run workflow".
 
@@ -84,6 +86,7 @@ You can manually trigger any of the three workflows:
 | Package | Files |
 |---|---|
 | Duplicati | `duplicati/duplicati.nuspec`, `duplicati/tools/chocolateyinstall.ps1`, `duplicati/legal/VERIFICATION.txt` |
+| Duplicati (canary) | `duplicati-canary/duplicati-canary.nuspec`, `duplicati-canary/tools/chocolateyinstall.ps1`, `duplicati-canary/legal/VERIFICATION.txt` |
 | Joplin | `joplin/joplin.nuspec`, `joplin/tools/chocolateyinstall.ps1`, `joplin/legal/VERIFICATION.txt` |
 | QOwnNotes | `qownnotes/qownnotes.nuspec`, `qownnotes/tools/chocolateyInstall.ps1`, `qownnotes/legal/VERIFICATION.txt` |
 

@@ -34,3 +34,23 @@ Copy an existing workflow (e.g. `.github/workflows/update-qownnotes.yml`) to
 
 - Validate the workflow YAML (`ruby -ryaml -e "YAML.load_file('.github/workflows/update-<package>.yml')"` or any YAML linter).
 - Trigger the workflow manually (`workflow_dispatch`) once and confirm it either publishes correctly or exits cleanly with "No updates available" — don't wait for the schedule to find out it's broken.
+
+## Exception: `duplicati-canary/` shares a package id with `duplicati/`
+
+Every other package folder in this repo maps one-to-one to a distinct Chocolatey package id
+matching the folder name. `duplicati-canary/` is a deliberate exception: its nuspec declares
+`<id>duplicati</id>` (the same id as the stable `duplicati/` package), and it publishes
+prerelease *versions* of that id (e.g. `2.3.0.106-canary`) rather than a separate
+`duplicati-canary` id.
+
+This is required, not a shortcut — see
+[`docs/superpowers/specs/2026-07-03-duplicati-canary-design.md`](docs/superpowers/specs/2026-07-03-duplicati-canary-design.md)
+for the full reasoning. In short: Chocolatey moderation rule CPMR0024 forbids channel names
+in package ids, and Duplicati's canary/stable Windows installers share an MSI upgrade code
+and cannot be installed side by side anyway, so a separate package id would be both
+non-compliant and misleading.
+
+If you're adding a similar prerelease-channel package for another piece of software in this
+repo, check whether the same constraints apply (does the vendor's installer actually support
+side-by-side install of the two channels?) before copying this pattern or defaulting to a
+separate package id.
