@@ -1,5 +1,6 @@
 **AFISCHER211'S PACKAGE NOTES:**
 
+* Install with `choco install joplin`.
 * Joplin is authored by Laurent Cozic. This Chocolatey package is co-owned by foo.li systeme + software and afischer211.
 * See [joplinapp.org](https://joplinapp.org/) for the application itself, or [laurent22/joplin](https://github.com/laurent22/joplin) for source and releases.
 * This package is kept up to date automatically — see [AUTOMATION.md](https://github.com/afischer211/my-chocolatey/blob/master/AUTOMATION.md) at the repository root.

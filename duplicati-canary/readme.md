@@ -9,9 +9,8 @@
   `choco install duplicati --version <version>-canary`.
 * Installing this **replaces** any existing stable Duplicati install: canary and stable
   builds share the same MSI upgrade code and cannot be installed side by side.
-* See [`docs/superpowers/specs/2026-07-03-duplicati-canary-design.md`](../docs/superpowers/specs/2026-07-03-duplicati-canary-design.md)
-  for the reasoning behind this design (why there is no separate `duplicati-canary` package
-  id).
+* Why no separate `duplicati-canary` package id? See
+  [CONTRIBUTING.md](../CONTRIBUTING.md#exception-duplicati-canary-and-duplicati-beta-share-a-package-id-with-duplicati).
 
 ***
 

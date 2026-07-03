@@ -1,15 +1,22 @@
 # my-chocolatey
-This repository contains misc install-packages for chocolatey (www.chocolatey.org).
+This repository contains Chocolatey packages (www.chocolatey.org) that I maintain, each
+kept up to date automatically. See a package's own folder for its `readme.md` with
+package-specific notes.
 
 ## Packages
 
-| Package | Source |
-|---|---|
-| [Duplicati](duplicati/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) |
-| [Duplicati (canary)](duplicati-canary/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) — publishes prerelease versions of the `duplicati` package id; install with `choco install duplicati --pre` |
-| [Duplicati (beta)](duplicati-beta/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) — publishes prerelease versions of the `duplicati` package id; install with `choco install duplicati --pre` |
-| [Joplin](joplin/) | [laurent22/joplin](https://github.com/laurent22/joplin) |
-| [QOwnNotes](qownnotes/) | [pbek/QOwnNotes](https://github.com/pbek/QOwnNotes) |
+| Package | What it is | Install |
+|---|---|---|
+| [Duplicati](duplicati/) | Backup software with encrypted, incremental backups ([source](https://github.com/duplicati/duplicati)) | `choco install duplicati` |
+| [Duplicati (canary)](duplicati-canary/) | Duplicati's most frequent, least-tested prerelease channel | `choco install duplicati --pre` |
+| [Duplicati (beta)](duplicati-beta/) | Duplicati's beta channel, promoted from canary for wider testing | `choco install duplicati --pre` |
+| [Joplin](joplin/) | Open-source note-taking and to-do app with sync ([source](https://github.com/laurent22/joplin)) | `choco install joplin` |
+| [QOwnNotes](qownnotes/) | Plain-text markdown notepad and to-do list manager ([source](https://github.com/pbek/QOwnNotes)) | `choco install qownnotes` |
+
+Duplicati (canary) and (beta) publish prerelease *versions* of the same `duplicati`
+package id — not separate packages — so `--pre` is what selects them; see
+[CONTRIBUTING.md](CONTRIBUTING.md#exception-duplicati-canary-and-duplicati-beta-share-a-package-id-with-duplicati)
+for why.
 
 ## Automated Updates
 

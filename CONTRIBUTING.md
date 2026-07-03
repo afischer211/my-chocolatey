@@ -44,9 +44,7 @@ exception: their nuspecs both declare `<id>duplicati</id>` (the same id as the s
 `2.3.0.106-canary`, `2.2.1.0-beta`) rather than separate `duplicati-canary` /
 `duplicati-beta` ids.
 
-This is required, not a shortcut — see
-[`docs/superpowers/specs/2026-07-03-duplicati-canary-design.md`](docs/superpowers/specs/2026-07-03-duplicati-canary-design.md)
-for the full reasoning. In short: Chocolatey moderation rule CPMR0024 forbids channel names
+This is required, not a shortcut. Chocolatey moderation rule CPMR0024 forbids channel names
 in package ids, and Duplicati's canary/stable Windows installers share an MSI upgrade code
 and cannot be installed side by side anyway, so a separate package id would be both
 non-compliant and misleading.

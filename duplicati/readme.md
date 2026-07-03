@@ -1,5 +1,8 @@
 **AFISCHER211'S PACKAGE NOTES (BASED ON BCURRAN3'S NOTES):**
 
+* Install with `choco install duplicati`. Want a newer, less-tested build? See
+  [Duplicati (canary)](../duplicati-canary/) or [Duplicati (beta)](../duplicati-beta/) —
+  same package id, install with `--pre`.
 * v2.x is still considered pre-release/"experimental" (beta) and in active development.
 * This package downloads the installer via a version specific URL. It should never fail unless the version is completely removed from the vendor website.
 * I became a co-maintainer for this package from Bill (bcurran3) and try to refresh this package more frequently. See also the original package-notes under https://github.com/bcurran3/ChocolateyPackages/blob/master/duplicati/readme.md.

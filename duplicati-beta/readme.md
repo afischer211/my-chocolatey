@@ -10,9 +10,9 @@
   `choco install duplicati --version <version>-beta`.
 * Installing this **replaces** any existing stable or canary Duplicati install: all Duplicati
   Windows builds share the same MSI upgrade code and cannot be installed side by side.
-* See [`docs/superpowers/specs/2026-07-03-duplicati-canary-design.md`](../docs/superpowers/specs/2026-07-03-duplicati-canary-design.md)
-  for the reasoning behind this design (why there is no separate `duplicati-beta` package
-  id) - the same reasoning applies to beta as to canary.
+* Why no separate `duplicati-beta` package id? See
+  [CONTRIBUTING.md](../CONTRIBUTING.md#exception-duplicati-canary-and-duplicati-beta-share-a-package-id-with-duplicati)
+  (the same reasoning applies to beta as to canary).
 
 ***
 
