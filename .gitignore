@@ -38,3 +38,6 @@ id_ed25519.*
 *apikey*
 *secrets*
 credentials.json
+
+# Local planning/spec docs (not part of the published package repo)
+docs/superpowers/
