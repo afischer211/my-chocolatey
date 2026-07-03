@@ -1,18 +1,26 @@
 # my-chocolatey
 This repository contains misc install-packages for chocolatey (www.chocolatey.org).
 
+## Packages
+
+| Package | Source |
+|---|---|
+| [Duplicati](duplicati/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) |
+| [Joplin](joplin/) | [laurent22/joplin](https://github.com/laurent22/joplin) |
+| [QOwnNotes](qownnotes/) | [pbek/QOwnNotes](https://github.com/pbek/QOwnNotes) |
+
 ## Automated Updates
 
-This repository includes GitHub Actions workflows for automatically updating packages:
-
-- **QOwnNotes**: Automatically checks for new releases daily and updates the package on Chocolatey.org
+Every package above is checked daily by a GitHub Actions workflow that looks for a new
+upstream release and, if found, builds and publishes the updated Chocolatey package
+automatically. See [AUTOMATION.md](AUTOMATION.md) for the full schedule and how it works.
 
 ## Manual Updates
 
-You can still manually update packages using the PowerShell AU (Automatic Updater) module:
+You can still manually update any package using the PowerShell AU (Automatic Updater) module:
 
 ```powershell
-cd qownnotes
+cd duplicati   # or joplin, or qownnotes
 .\update.ps1
 ```
 
