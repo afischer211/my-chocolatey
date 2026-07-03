@@ -7,6 +7,12 @@ on:
     - cron: '30 7 * * *'
   workflow_dispatch:
     # Allow manual triggering of the workflow
+    inputs:
+      force:
+        description: 'Force build and publish even if update.ps1 found no changes (e.g. to bootstrap the first release or re-push after fixing a checksum)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   update-duplicati-canary:
@@ -108,9 +114,13 @@ jobs:
         run: |
           # Check if there are any changes to commit
           $changes = git status --porcelain
+          $forced = "${{ github.event.inputs.force }}" -eq 'true'
           if ($changes) {
             Write-Host "Changes detected:"
             Write-Host $changes
+            echo "has-changes=true" >> $env:GITHUB_OUTPUT
+          } elseif ($forced) {
+            Write-Host "No file changes, but force=true was requested - proceeding anyway"
             echo "has-changes=true" >> $env:GITHUB_OUTPUT
           } else {
             Write-Host "No changes detected"
@@ -179,22 +189,31 @@ jobs:
         if: steps.check-changes.outputs.has-changes == 'true'
         shell: powershell
         run: |
-          # Commit only the metadata files, not downloaded binaries
+          # Commit only the metadata files, not downloaded binaries.
+          # A forced publish (workflow_dispatch force=true) can reach this step with
+          # nothing actually changed in the working tree - only commit if something is staged.
           git add duplicati-canary/duplicati-canary.nuspec duplicati-canary/tools/chocolateyinstall.ps1 duplicati-canary/legal/VERIFICATION.txt
-          git commit -m "Update Duplicati canary package to version ${{ steps.build-and-publish.outputs.package-version }}"
+          $staged = git diff --cached --name-only
+          if ($staged) {
+            git commit -m "Update Duplicati canary package to version ${{ steps.build-and-publish.outputs.package-version }}"
+            git push origin HEAD
+          } else {
+            Write-Host "No metadata changes to commit (forced publish of an already-committed version)."
+          }
 
-          # Create version tag
+          # Create version tag. Only delete an existing tag if one is actually present -
+          # git tag -d / push --delete on a nonexistent tag would otherwise print a
+          # (harmless but confusing) error on every first-ever tag for a version.
           $tagName = "duplicati-canary-v${{ steps.build-and-publish.outputs.package-version }}"
-
-          git tag -d $tagName
-          git push --delete origin $tagName
+          $existingTag = git tag -l $tagName
+          if ($existingTag) {
+            git tag -d $tagName
+            git push --delete origin $tagName
+          }
           git tag $tagName
-
-          # Push changes and tag
-          git push origin HEAD
           git push origin $tagName
 
-          Write-Host "Changes committed and tagged as $tagName"
+          Write-Host "Tagged as $tagName"
 
       - name: Summary
         shell: powershell
