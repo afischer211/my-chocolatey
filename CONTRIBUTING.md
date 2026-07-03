@@ -1,6 +1,6 @@
 # Adding a new package
 
-This repo has four packages (`duplicati/`, `duplicati-canary/`, `joplin/`, `qownnotes/`), each with an
+This repo has five packages (`duplicati/`, `duplicati-canary/`, `duplicati-beta/`, `joplin/`, `qownnotes/`), each with an
 AU-based (`update.ps1`) auto-updater and a near-identical GitHub Actions workflow that
 runs it daily. Use an existing package as your template rather than starting from
 scratch — pick the one closest to what you're packaging.
@@ -18,7 +18,7 @@ Create `<package>/` with:
 
 Copy an existing workflow (e.g. `.github/workflows/update-qownnotes.yml`) to
 `.github/workflows/update-<package>.yml` and adjust:
-- `name:`, job id, and `cron:` schedule — pick a time that doesn't collide with the existing four (`0 6`, `30 6`, `0 7`, `30 7` UTC); leave a gap of at least 15–30 minutes.
+- `name:`, job id, and `cron:` schedule — pick a time that doesn't collide with the existing five (`0 6`, `30 6`, `0 7`, `30 7`, `0 8` UTC); leave a gap of at least 15–30 minutes.
 - `working-directory:` and file paths (`.nuspec`, install script) in every step.
 - The `git add` line in "Commit changes and create tag" — list the exact metadata files your package's `update.ps1` modifies.
 - Keep the `Install-WithRetry` wrapper around `Install-PackageProvider` / `Install-Module -Name Chocolatey-AU` as-is — it exists to absorb transient PowerShell Gallery failures (see [AUTOMATION.md](AUTOMATION.md#transient-powershell-gallery-failures)). Don't drop it when copying.
@@ -35,13 +35,14 @@ Copy an existing workflow (e.g. `.github/workflows/update-qownnotes.yml`) to
 - Validate the workflow YAML (`ruby -ryaml -e "YAML.load_file('.github/workflows/update-<package>.yml')"` or any YAML linter).
 - Trigger the workflow manually (`workflow_dispatch`) once and confirm it either publishes correctly or exits cleanly with "No updates available" — don't wait for the schedule to find out it's broken.
 
-## Exception: `duplicati-canary/` shares a package id with `duplicati/`
+## Exception: `duplicati-canary/` and `duplicati-beta/` share a package id with `duplicati/`
 
 Every other package folder in this repo maps one-to-one to a distinct Chocolatey package id
-matching the folder name. `duplicati-canary/` is a deliberate exception: its nuspec declares
-`<id>duplicati</id>` (the same id as the stable `duplicati/` package), and it publishes
-prerelease *versions* of that id (e.g. `2.3.0.106-canary`) rather than a separate
-`duplicati-canary` id.
+matching the folder name. `duplicati-canary/` and `duplicati-beta/` are a deliberate
+exception: their nuspecs both declare `<id>duplicati</id>` (the same id as the stable
+`duplicati/` package), and they publish prerelease *versions* of that id (e.g.
+`2.3.0.106-canary`, `2.2.1.0-beta`) rather than separate `duplicati-canary` /
+`duplicati-beta` ids.
 
 This is required, not a shortcut — see
 [`docs/superpowers/specs/2026-07-03-duplicati-canary-design.md`](docs/superpowers/specs/2026-07-03-duplicati-canary-design.md)

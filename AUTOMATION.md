@@ -1,7 +1,7 @@
 # Automated Chocolatey Package Updates
 
 This repository uses GitHub Actions to automatically check for new upstream releases and
-publish updated Chocolatey packages. All four packages follow the same workflow pattern;
+publish updated Chocolatey packages. All five packages follow the same workflow pattern;
 this doc covers that shared pattern plus anything package-specific.
 
 ## Schedule
@@ -10,10 +10,11 @@ this doc covers that shared pattern plus anything package-specific.
 |---|---|---|
 | Duplicati | `.github/workflows/update-duplicati.yml` | `0 7 * * *` (7:00 AM) |
 | Duplicati (canary) | `.github/workflows/update-duplicati-canary.yml` | `30 7 * * *` (7:30 AM) |
+| Duplicati (beta) | `.github/workflows/update-duplicati-beta.yml` | `0 8 * * *` (8:00 AM) |
 | Joplin | `.github/workflows/update-joplin.yml` | `30 6 * * *` (6:30 AM) |
 | QOwnNotes | `.github/workflows/update-qownnotes.yml` | `0 6 * * *` (6:00 AM) |
 
-Schedules are staggered so the four jobs don't compete for the same shared PowerShell
+Schedules are staggered so the five jobs don't compete for the same shared PowerShell
 Gallery / Chocolatey.org resources at once. Each workflow can also be triggered manually
 (see below).
 
@@ -33,6 +34,7 @@ Each workflow:
 
 - **Duplicati** deletes the tag both locally and on the remote before recreating it (`git tag -d`, `git push --delete origin`, then `git tag` + `git push origin $tagName`). If the tag doesn't already exist remotely, `git push --delete` will fail — this is only safe because in practice the tag from the previous version always exists once the package has shipped once.
 - **Duplicati (canary)** uses the same delete-and-recreate strategy as stable Duplicati, tagging as `duplicati-canary-v<version>` (distinct from stable's `duplicati-v<version>` tags) so the two are never confused.
+- **Duplicati (beta)** uses the same delete-and-recreate strategy as stable Duplicati and Duplicati (canary), tagging as `duplicati-beta-v<version>` (distinct from the other two Duplicati tag prefixes).
 - **Joplin** and **QOwnNotes** instead force-move the tag (`git tag -f $tagName`, `git push origin $tagName --force`), which works whether or not the tag previously existed.
 
 Neither approach is more "correct" than the other, but be aware of the difference before copying one workflow as a template for a new package — a force-push to a tag is a rewriting operation and will silently overwrite history if the tag is ever reused for something else.
@@ -74,10 +76,10 @@ Ensure the repository has the following permissions enabled:
 
 ## Manual Execution
 
-You can manually trigger any of the four workflows:
+You can manually trigger any of the five workflows:
 
 1. Go to the "Actions" tab in your GitHub repository.
-2. Select "Update Duplicati Package", "Update Duplicati Canary Package", "Update Joplin Package", or "Update QOwnNotes Package".
+2. Select "Update Duplicati Package", "Update Duplicati Canary Package", "Update Duplicati Beta Package", "Update Joplin Package", or "Update QOwnNotes Package".
 3. Click "Run workflow".
 4. Choose the branch and click "Run workflow".
 
@@ -87,6 +89,7 @@ You can manually trigger any of the four workflows:
 |---|---|
 | Duplicati | `duplicati/duplicati.nuspec`, `duplicati/tools/chocolateyinstall.ps1`, `duplicati/legal/VERIFICATION.txt` |
 | Duplicati (canary) | `duplicati-canary/duplicati-canary.nuspec`, `duplicati-canary/tools/chocolateyinstall.ps1`, `duplicati-canary/legal/VERIFICATION.txt` |
+| Duplicati (beta) | `duplicati-beta/duplicati-beta.nuspec`, `duplicati-beta/tools/chocolateyinstall.ps1`, `duplicati-beta/legal/VERIFICATION.txt` |
 | Joplin | `joplin/joplin.nuspec`, `joplin/tools/chocolateyinstall.ps1`, `joplin/legal/VERIFICATION.txt` |
 | QOwnNotes | `qownnotes/qownnotes.nuspec`, `qownnotes/tools/chocolateyInstall.ps1`, `qownnotes/legal/VERIFICATION.txt` |
 

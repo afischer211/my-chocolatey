@@ -7,9 +7,10 @@ and, if found, builds and publishes the updated Chocolatey package automatically
 |---|---|
 | `update-duplicati.yml` | [Duplicati](../../duplicati/) |
 | `update-duplicati-canary.yml` | [Duplicati canary](../../duplicati-canary/) — publishes prerelease versions of the `duplicati` package id |
+| `update-duplicati-beta.yml` | [Duplicati beta](../../duplicati-beta/) — publishes prerelease versions of the `duplicati` package id |
 | `update-joplin.yml` | [Joplin](../../joplin/) |
 | `update-qownnotes.yml` | [QOwnNotes](../../qownnotes/) |
 
-All four follow the same steps and share the same setup requirements (a `CHOCOLATEY_API_KEY`
+All five follow the same steps and share the same setup requirements (a `CHOCOLATEY_API_KEY`
 repository secret). See [AUTOMATION.md](../../AUTOMATION.md) at the repository root for the
 full schedule, process details, and troubleshooting.

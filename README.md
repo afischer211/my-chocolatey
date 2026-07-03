@@ -7,6 +7,7 @@ This repository contains misc install-packages for chocolatey (www.chocolatey.or
 |---|---|
 | [Duplicati](duplicati/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) |
 | [Duplicati (canary)](duplicati-canary/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) — publishes prerelease versions of the `duplicati` package id; install with `choco install duplicati --pre` |
+| [Duplicati (beta)](duplicati-beta/) | [duplicati/duplicati](https://github.com/duplicati/duplicati) — publishes prerelease versions of the `duplicati` package id; install with `choco install duplicati --pre` |
 | [Joplin](joplin/) | [laurent22/joplin](https://github.com/laurent22/joplin) |
 | [QOwnNotes](qownnotes/) | [pbek/QOwnNotes](https://github.com/pbek/QOwnNotes) |
 
@@ -21,7 +22,7 @@ automatically. See [AUTOMATION.md](AUTOMATION.md) for the full schedule and how 
 You can still manually update any package using the PowerShell AU (Automatic Updater) module:
 
 ```powershell
-cd duplicati   # or duplicati-canary, joplin, or qownnotes
+cd duplicati   # or duplicati-canary, duplicati-beta, joplin, or qownnotes
 .\update.ps1
 ```
 
