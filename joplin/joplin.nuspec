@@ -14,7 +14,12 @@
         <projectSourceUrl>https://github.com/laurent22/joplin</projectSourceUrl>
         <mailingListUrl>https://discourse.joplinapp.org/</mailingListUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>Note-taking and to-do application with synchronization capabilities for Windows, macOS, Linux, Android and iOS.</description>
+        <description><![CDATA[Note-taking and to-do application with synchronization capabilities for Windows, macOS, Linux, Android and iOS.
+
+## Notes
+
+* This package installs Joplin **per-machine** (to Program Files, requires admin), passing `/ALLUSERS=1` to the installer — Joplin's own installer defaults to a per-user install instead.
+]]></description>
         <summary>Joplin Notes and To-Do</summary>
         <releaseNotes>https://github.com/laurent22/joplin/releases/tag/v3.6.15</releaseNotes>
         <copyright>https://joplinapp.org/</copyright>
