@@ -5,3 +5,36 @@
 .vscode/
 *.zip
 *.msi
+
+# OS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptstream
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Credentials / secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.pfx
+*.p12
+*.cer
+*.crt
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*_api_key*
+*apikey*
+*secrets*
+credentials.json
