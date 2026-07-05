@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>qownnotes</id>
-    <version>26.7.0</version>
+    <version>26.7.1</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/qownnotes</packageSourceUrl>	
     <title>QOwnNotes</title>
     <authors>Patrizio Bekerle (pbek)</authors>
@@ -14,22 +14,22 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language />
     <summary>QOwnNotes is a plain-text file notepad and todo-list manager with markdown support and ownCloud integration.</summary>
-    <description>
-QOwnNotes is the open source plain-text file notepad with markdown support and todo list manager for GNU/Linux, Mac OS X and Windows by Patrizio Bekerle, that (optionally) works together with the notes application of ownCloud or Nextcloud. So you are able to write down your thoughts with QOwnNotes and edit or search for them later from your mobile device or the ownCloud/Nextcloud web-services.
+    <description><![CDATA[* Install with `choco install qownnotes`.
+* This package doesn't run a traditional installer — it extracts the app and adds two
+  Start Menu shortcuts: `QOwnNotes` (normal) and `QOwnNotes (Portable)` (portable mode).
+* QOwnNotes is authored by Patrizio Bekerle (pbek), based on earlier work by dimqua.
+* See [qownnotes.org](https://www.qownnotes.org) for the application itself, or [pbek/QOwnNotes](https://github.com/pbek/QOwnNotes) for source and releases.
+* This package is kept up to date automatically — see [AUTOMATION.md](https://github.com/afischer211/my-chocolatey/blob/master/AUTOMATION.md) at the repository root.
 
-## Features
+***
 
-* You own your own notes! All notes are stored as plain-text files on your desktop computer.
-* Sync them over devices (desktop and mobile) with your ownCloud or Nextcloud sync client.
-* Use ownCloud Notes to edit your notes in the web.
+If applicable, please always consider donating or purchasing the software you installed - including [Chocolatey's licensed editions](https://chocolatey.org/pricing).
 
-## Notes
+<h3>TIA,</h3>
 
-* Use `QOwnNotes (Portable)` shortcut on the Start menu to run QOwnNotes in portable mode.
-* This package does not support Windows XP.
-* This package is based on the work of Patrizio Bekerle (dimqua).
-    </description>
-    <releaseNotes>https://github.com/pbek/QOwnNotes/blob/develop/CHANGELOG.md#2670</releaseNotes>
+<h3>Alexander</h3>
+]]></description>
+    <releaseNotes>https://github.com/pbek/QOwnNotes/blob/develop/CHANGELOG.md#2671</releaseNotes>
     <tags>qownnotes notes notepad qt qt5 markdown nextcloud owncloud</tags>
     <projectSourceUrl>https://github.com/pbek/QOwnNotes</projectSourceUrl>
     <iconUrl>https://github.com/pbek/QOwnNotes/blob/develop/icons/icon.png</iconUrl>
