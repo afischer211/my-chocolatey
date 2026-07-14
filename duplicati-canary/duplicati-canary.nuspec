@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>duplicati</id>
-    <version>2.3.0.106-canary</version>
+    <version>2.3.0.107-canary</version>
     <packageSourceUrl>https://github.com/afischer211/my-chocolatey/tree/master/duplicati-canary</packageSourceUrl>
     <owners>bcurran3,afischer211</owners>
     <title>Duplicati (Install) - Canary</title>
@@ -18,13 +18,17 @@
     <bugTrackerUrl>https://github.com/duplicati/duplicati/issues</bugTrackerUrl>
     <tags>duplicati cloud backup admin canary prerelease</tags>
     <summary>Duplicati - Free backup software to store encrypted backups online. This is the canary (prerelease) channel.</summary>
-    <description><![CDATA[**This is Duplicati's canary channel** - frequent, less-tested builds published between stable releases, for people who want to try new features early or help find bugs before they reach stable.
-
-* This package publishes prerelease versions of the same `duplicati` package id used by the stable package. Install it with `choco install duplicati --pre`, or pin an exact version with `choco install duplicati --version 2.3.0.106-canary`.
-* Installing this **replaces** any existing stable Duplicati install - canary and stable builds share the same MSI upgrade code, so they cannot be installed side by side. To go back to stable, install `duplicati` without `--pre`.
-* v2.x is still considered pre-release/"experimental" (beta) and in active development, and the canary channel is less tested still than stable.
-* This package downloads the installer via a version specific URL. It should never fail unless the version is completely removed from the vendor website.
-* I became a co-maintainer for this package from Bill (bcurran3) and try to refresh this package more frequently. See also the original package-notes under https://github.com/bcurran3/ChocolateyPackages/blob/master/duplicati/readme.md.
+    <description><![CDATA[* This package tracks Duplicati's **canary** channel: frequent, less-tested builds published
+  between stable releases. See the main [Duplicati package](../duplicati/) for the stable
+  channel.
+* This package publishes **prerelease versions of the same `duplicati` package id** used by
+  the stable package - it is not a separate package id. Install with
+  `choco install duplicati --pre`, or pin an exact version with
+  `choco install duplicati --version <version>-canary`.
+* Installing this **replaces** any existing stable Duplicati install: canary and stable
+  builds share the same MSI upgrade code and cannot be installed side by side.
+* Why no separate `duplicati-canary` package id? See
+  [CONTRIBUTING.md](../CONTRIBUTING.md#exception-duplicati-canary-and-duplicati-beta-share-a-package-id-with-duplicati).
 
 ***
 
