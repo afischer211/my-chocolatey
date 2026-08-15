@@ -1,11 +1,11 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName    = 'duplicati'
-$version        = '2.3.0.108-canary'
+$version        = '2.3.0.109-canary'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url            = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.108_canary_2026-07-20/duplicati-2.3.0.108_canary_2026-07-20-win-x86-gui.msi'
-$checksum       = '21A4263DB1488A1980BDF238BBFF8DF16BF6F4F224CA1DA3F8A24C9C4F8F471B'
-$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.108_canary_2026-07-20/duplicati-2.3.0.108_canary_2026-07-20-win-x64-gui.msi'
-$checksum64     = 'C9D59F768753EAC920EB9FACF84C84B8B61276986FCCFF2F5A51E15A049BB638'
+$url            = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.109_canary_2026-08-14/duplicati-2.3.0.109_canary_2026-08-14-win-x86-gui.msi'
+$checksum       = 'BC1280B60B9BD5578D7C49A22C64BEDE605CA5A83E5AAAC097A3240DB0784B64'
+$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.3.0.109_canary_2026-08-14/duplicati-2.3.0.109_canary_2026-08-14-win-x64-gui.msi'
+$checksum64     = 'A1C303B6BD9DEC002F7CD188EE86EEEF0391267A443E388866B3A11D997D6931'
 
 $packageArgs = @{
   packageName    = $packageName
