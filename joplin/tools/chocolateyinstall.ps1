@@ -1,8 +1,8 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName  = 'joplin'
-$version      = '3.6.15'
-$url          = 'https://github.com/laurent22/joplin/releases/download/v3.6.15/Joplin-Setup-3.6.15.exe'
-$checksum     = '99E0741977F82132A9BF6C6593A57AB9C686A1C8355338D0AC1E1EA622ECC96B'
+$version      = '3.6.16'
+$url          = 'https://github.com/laurent22/joplin/releases/download/v3.6.16/Joplin-Setup-3.6.16.exe'
+$checksum     = 'BB26FA0BAB6905CF7A22F2D1DCB18EF7F7C0F62C2E10C84CD8E743F7CA962C50'
 $checksumType = 'sha256'
 
 $packageArgs = @{
