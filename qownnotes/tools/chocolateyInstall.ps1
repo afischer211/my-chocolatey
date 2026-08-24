@@ -1,9 +1,9 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName = 'qownnotes'
-$version     = '26.8.7'
+$version     = '26.8.8'
 $toolsDir    = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url         = 'https://github.com/pbek/QOwnNotes/releases/download/v26.8.7/QOwnNotes.zip'
-$checksum    = 'BBB801C6A4908300FA4945FA64961B2C3614E08ED22A4516929042BE36FEC347'
+$url         = 'https://github.com/pbek/QOwnNotes/releases/download/v26.8.8/QOwnNotes.zip'
+$checksum    = '141260825865D32C5C0F30285BA2591A13FC7B7EE0EBE5CA86855550B65641AD'
 $checksumType = 'sha256'
 
 # First, download the ZIP file
