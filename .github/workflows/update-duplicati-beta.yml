@@ -79,6 +79,8 @@ jobs:
       - name: Update Duplicati beta package
         shell: powershell
         working-directory: duplicati-beta
+        env:
+          GH_API_TOKEN: ${{ github.token }}
         run: |
           Write-Host "Starting Duplicati beta package update check..."
 

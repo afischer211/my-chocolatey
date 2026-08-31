@@ -29,21 +29,28 @@ function global:au_BeforeUpdate() {
 }
 
 function global:au_GetLatest {
-	# Use GitHub API to get the latest release and its assets
+	# Use GitHub API to get the latest release and its assets.
+	# Authenticate when a token is available (GitHub Actions) so we don't hit the
+	# 60 req/hr unauthenticated rate limit on the shared runner IPs, which forces
+	# the fragile web-scraping fallback below.
 	$releases_url = "https://api.github.com/repos/duplicati/duplicati/releases/latest"
-	
+	$headers = @{}
+	if ($env:GH_API_TOKEN) { $headers['Authorization'] = "Bearer $env:GH_API_TOKEN" }
+
 	try {
-		$release = Invoke-RestMethod -Uri $releases_url -UseBasicParsing
+		$release = Invoke-RestMethod -Uri $releases_url -UseBasicParsing -Headers $headers
 	} catch {
 		Write-Warning "Failed to access GitHub API, falling back to web scraping"
-		# Fallback to original method if API fails
+		# Fallback to web scraping if the API fails. Exclude prerelease tags
+		# (_beta_/_canary_/_experimental_) so a newer beta isn't mistaken for the
+		# latest stable - the API's /releases/latest already skips prereleases.
 		$download_page = Invoke-WebRequest -Uri https://github.com/duplicati/duplicati/releases/ -UseBasicParsing
-		$tag_url = $download_page.links | ? href -match 'releases/tag/v' | % href | select -First 1
-		
+		$tag_url = $download_page.links | ? href -match 'releases/tag/v' | ? href -notmatch '_beta_|_canary_|_experimental_' | % href | select -First 1
+
 		if (-not $tag_url) {
-			throw "No release tag found on the releases page"
+			throw "No stable release tag found on the releases page"
 		}
-		
+
 		$version = ($tag_url -split '/' | select -Last 1).trim('v')
 		$modurl32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
 		$modurl64 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.msi"

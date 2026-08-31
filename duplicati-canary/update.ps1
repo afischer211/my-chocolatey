@@ -34,8 +34,14 @@ function global:au_GetLatest {
 	# entirely, which is exactly how the stable duplicati package ignores canary builds.
 	$releases_url = "https://api.github.com/repos/duplicati/duplicati/releases"
 
+	# Authenticate when a token is available (GitHub Actions) so we don't hit the
+	# 60 req/hr unauthenticated rate limit on the shared runner IPs, which forces
+	# the fragile web-scraping fallback below.
+	$headers = @{}
+	if ($env:GH_API_TOKEN) { $headers['Authorization'] = "Bearer $env:GH_API_TOKEN" }
+
 	try {
-		$releases = Invoke-RestMethod -Uri $releases_url -UseBasicParsing
+		$releases = Invoke-RestMethod -Uri $releases_url -UseBasicParsing -Headers $headers
 		$canaryRelease = $releases | Where-Object { $_.tag_name -match '_canary_' } | Select-Object -First 1
 
 		if (-not $canaryRelease) {
