@@ -27,11 +27,16 @@ function global:au_BeforeUpdate() {
 }
 
 function global:au_GetLatest {
-	# Use GitHub API to get the latest release and its assets
+	# Use GitHub API to get the latest release and its assets.
+	# Authenticate when a token is available (GitHub Actions) so we don't hit the
+	# 60 req/hr unauthenticated rate limit on the shared runner IPs, which forces
+	# the fragile web-scraping fallback below.
 	$releases_url = "https://api.github.com/repos/pbek/QOwnNotes/releases/latest"
-	
+	$headers = @{}
+	if ($env:GH_API_TOKEN) { $headers['Authorization'] = "Bearer $env:GH_API_TOKEN" }
+
 	try {
-		$release = Invoke-RestMethod -Uri $releases_url -UseBasicParsing
+		$release = Invoke-RestMethod -Uri $releases_url -UseBasicParsing -Headers $headers
 	} catch {
 		Write-Warning "Failed to access GitHub API, falling back to web scraping"
 		# Fallback to original method if API fails
