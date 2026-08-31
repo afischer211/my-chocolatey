@@ -58,9 +58,7 @@ jobs:
       - name: Update Joplin package
         shell: powershell
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Just for security, if another variable name is used
-          github_api_key: ${{ secrets.GITHUB_TOKEN }}
+          GH_API_TOKEN: ${{ github.token }}
         working-directory: joplin
         run: |
           Write-Host "Starting Joplin package update check..."

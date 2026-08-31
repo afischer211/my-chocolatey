@@ -93,7 +93,7 @@ function Get-GHRelease {
 # --- AU hook: build Latest from GH prerelease (fallback to stable if none) ---
 function global:au_GetLatest {
     $repo = 'laurent22/joplin'
-    $token = $env:GITHUB_TOKEN      # set to avoid rate limits (recommended)
+    $token = $env:GH_API_TOKEN      # set to avoid rate limits (recommended)
 
     $r = Get-GHRelease -Repo $repo -Token $token
     if (-not $r) { throw "No release found for $repo." }
