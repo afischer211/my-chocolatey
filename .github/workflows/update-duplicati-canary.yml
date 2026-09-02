@@ -35,7 +35,7 @@ jobs:
             param(
               [Parameter(Mandatory)][scriptblock]$Action,
               [string]$Description,
-              [int]$MaxAttempts = 5
+              [int]$MaxAttempts = 8
             )
             for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
               try {
@@ -47,7 +47,7 @@ jobs:
                 if ($attempt -eq $MaxAttempts) {
                   throw
                 }
-                Start-Sleep -Seconds (10 * $attempt)
+                Start-Sleep -Seconds (15 * $attempt)
               }
             }
           }
