@@ -22,7 +22,7 @@ Gallery / Chocolatey.org resources at once. Each workflow can also be triggered 
 
 Each workflow:
 1. Checks out the repository.
-2. Installs the NuGet package provider and the `Chocolatey-AU` PowerShell module, then installs Chocolatey if it isn't already present on the runner. This step retries (up to 5 attempts, with backoff) — see [Transient PowerShell Gallery failures](#transient-powershell-gallery-failures) below.
+2. Installs the NuGet package provider and the `Chocolatey-AU` PowerShell module, then installs Chocolatey if it isn't already present on the runner. This step retries (up to 8 attempts, with backoff) — see [Transient PowerShell Gallery failures](#transient-powershell-gallery-failures) below.
 3. Runs the package's `update.ps1` script (the AU module), which checks the upstream project for a newer version and, if found, rewrites the package's `.nuspec`, `chocolateyinstall.ps1`, and `VERIFICATION.txt` with the new version/URL/checksum.
 4. Checks `git status --porcelain` to see if step 3 actually changed anything. If not, the rest of the job is skipped and it exits cleanly — this is the common case on any given day.
 5. If there are changes:
@@ -42,12 +42,12 @@ Neither approach is more "correct" than the other, but be aware of the differenc
 ### Transient PowerShell Gallery failures
 
 The module-install step wraps `Install-PackageProvider` and `Install-Module -Name Chocolatey-AU`
-in a retry loop (`Install-WithRetry`, 5 attempts, exponential-ish backoff). This exists because
+in a retry loop (`Install-WithRetry`, 8 attempts, exponential-ish backoff). This exists because
 these calls have occasionally failed with a misleading `No match was found for the specified
 search criteria` error even though the module exists and the identical call succeeds moments
 later — a transient PowerShell Gallery / shared-runner-IP issue, not a real configuration
-problem. Seeing `Attempt 2/5 to install Chocolatey-AU module failed: ...` in the logs is
-expected occasional noise, not a failure, as long as a later attempt succeeds. If all 5
+problem. Seeing `Attempt 2/8 to install Chocolatey-AU module failed: ...` in the logs is
+expected occasional noise, not a failure, as long as a later attempt succeeds. If all 8
 attempts fail, the step (and job) fails for real and is worth investigating.
 
 ## Required Setup
@@ -108,7 +108,7 @@ Common issues and solutions:
 1. **API Key errors**: Ensure `CHOCOLATEY_API_KEY` secret is properly configured.
 2. **Permission errors**: Check repository permissions in Settings.
 3. **Package validation errors**: Review the AU module configuration in `update.ps1`.
-4. **Module install failures**: See [Transient PowerShell Gallery failures](#transient-powershell-gallery-failures) above — usually self-resolves via retry; only investigate further if all 5 attempts fail.
+4. **Module install failures**: See [Transient PowerShell Gallery failures](#transient-powershell-gallery-failures) above — usually self-resolves via retry; only investigate further if all 8 attempts fail.
 5. **Network errors**: GitHub Actions may have temporary connectivity issues.
 
 For detailed logs, check the workflow run details in the Actions tab.
