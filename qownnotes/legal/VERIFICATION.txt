@@ -7,7 +7,7 @@ Package can be verified like this:
 
 1. Go to
 
-   x32: https://github.com/pbek/QOwnNotes/releases/download/v26.9.5/QOwnNotes.zip
+   x32: https://github.com/pbek/QOwnNotes/releases/download/v26.9.6/QOwnNotes.zip
 
    to download the zip.
 
@@ -15,4 +15,4 @@ Package can be verified like this:
    - Use powershell function 'Get-FileHash'
    - Use Chocolatey utility 'checksum.exe'
 
-   checksum32: 5ABFBEC21C315867007F7F86DAB1E198C2BE46F37F63CAE31D29066F69A79E6F
+   checksum32: 515AF85DC647C9016EB1C8090E0E75CF2895ACFF4DFB68B9145CF8D5A5826F5D
