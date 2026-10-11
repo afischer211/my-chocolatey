@@ -12,7 +12,7 @@ Package can be verified like this:
 
 1. Go to
 
-   x64: https://github.com/duplicati/duplicati/releases/download/v2.4.0.103_canary_2026-10-02/duplicati-2.4.0.103_canary_2026-10-02-win-x64-gui.msi
+   x64: https://github.com/duplicati/duplicati/releases/download/v2.4.0.104_canary_2026-10-11/duplicati-2.4.0.104_canary_2026-10-11-win-x64-gui.msi
 
    to download the msi.
 
@@ -20,4 +20,4 @@ Package can be verified like this:
    - Use powershell function 'Get-FileHash'
    - Use Chocolatey utility 'checksum.exe'
 
-   checksum64: F27E118B217CFA63925C765AB89C1C20A8E69B293D16120CFF4820425056B312
+   checksum64: 0EBE2663BA245FB73DDE0AF07E1879B2C4953A8A652184C953017B233CB730ED
