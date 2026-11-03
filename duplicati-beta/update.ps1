@@ -28,6 +28,21 @@ function global:au_BeforeUpdate() {
 	Get-RemoteFiles -Purge -NoSuffix
 }
 
+# Duplicati no longer publishes x86 MSIs for every release. Return the URL if it exists,
+# or $null on HTTP 404 so the package can fall back to 64-bit only. Other errors rethrow.
+function Get-OptionalUrl([string]$Url) {
+	try {
+		Invoke-WebRequest -Uri $Url -Method Head -UseBasicParsing | Out-Null
+		return $Url
+	} catch {
+		if ($_.Exception.Response -and [int]$_.Exception.Response.StatusCode -eq 404) {
+			Write-Warning "Optional 32-bit installer not found, building 64-bit only: $Url"
+			return $null
+		}
+		throw
+	}
+}
+
 function global:au_GetLatest {
 	# Use GitHub API to get the release list and pick the newest beta-tagged release.
 	# NOTE: intentionally NOT /releases/latest - that endpoint excludes prereleases
@@ -59,12 +74,14 @@ function global:au_GetLatest {
 
 		$version = ($tag_url -split '/' | select -Last 1).trim('v')
 		$cleanVersion = ($version -replace '_beta.*') + '-beta'
-		$modurl32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
+		$modurl32 = Get-OptionalUrl "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
 		$modurl64 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x64-gui.msi"
 
 		Write-Host "Version: $version"
         Write-Host "CleanVersion: $cleanVersion"
-		return @{ Version = $cleanVersion; URL32 = $modurl32; URL64 = $modurl64; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
+		$latest = @{ Version = $cleanVersion; URL32 = $modurl32; URL64 = $modurl64; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
+		if (-not $modurl32) { $latest.Remove('URL32') }
+		return $latest
 	}
 
 	$version = $betaRelease.tag_name.TrimStart('v')
@@ -88,9 +105,12 @@ function global:au_GetLatest {
 		Write-Host "No MSI asset found in API response, trying standard URL: $download_url"
 	}
 
-	$download_url32 = "https://github.com/duplicati/duplicati/releases/download/v$version/duplicati-$version-win-x86-gui.msi"
+	$msiAsset32 = $betaRelease.assets | Where-Object { $_.name -match "win-x86-gui\.msi$" } | Select-Object -First 1
+	$download_url32 = if ($msiAsset32) { $msiAsset32.browser_download_url } else { Write-Warning "No 32-bit MSI in this release, building 64-bit only"; $null }
 
-	return @{ Version = $cleanVersion; URL32 = $download_url32; URL64 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
+	$latest = @{ Version = $cleanVersion; URL32 = $download_url32; URL64 = $download_url; PackageName = 'duplicati'; ChecksumType32 = 'sha256'; ChecksumType64 = 'sha256'; LongVersion = $version}
+	if (-not $download_url32) { $latest.Remove('URL32') }
+	return $latest
 }
 
 Update-Package -ChecksumFor none -NoCheckChocoVersion
