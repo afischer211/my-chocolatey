@@ -1,11 +1,11 @@
 ﻿$ErrorActionPreference = 'Stop'
 $packageName    = 'duplicati'
-$version        = '2.4.1.102-canary'
+$version        = '2.4.1.103-canary'
 $toolsDir       = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url            = ''
 $checksum       = ''
-$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.4.1.102_canary_2026-11-14/duplicati-2.4.1.102_canary_2026-11-14-win-x64-gui.msi'
-$checksum64     = '92330EEF189D098CC8ABF07B7EFCA9C9C066353808F3D70A276E44FC1B594C9E'
+$url64          = 'https://github.com/duplicati/duplicati/releases/download/v2.4.1.103_canary_2026-11-20/duplicati-2.4.1.103_canary_2026-11-20-win-x64-gui.msi'
+$checksum64     = '5303DC2CD780635DC2B1F7CD9705076BDA19F8A9AFAB7C83796C5E90E19E0F04'
 
 $packageArgs = @{
   packageName    = $packageName
