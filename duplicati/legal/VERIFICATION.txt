@@ -7,7 +7,7 @@ Package can be verified like this:
 
 1. Go to
 
-   x64: https://github.com/duplicati/duplicati/releases/download/v2.4.1.0_stable_2026-10-29/duplicati-2.4.1.0_stable_2026-10-29-win-x64-gui.msi
+   x64: https://github.com/duplicati/duplicati/releases/download/v2.4.1.1_stable_2026-11-25/duplicati-2.4.1.1_stable_2026-11-25-win-x64-gui.msi
 
    to download the msi.
 
@@ -15,4 +15,4 @@ Package can be verified like this:
    - Use powershell function 'Get-FileHash'
    - Use Chocolatey utility 'checksum.exe'
 
-   checksum64: B5574D08BAF9782F43B961741814A111C5DC3A19F4EBB3F49FB1556D0BAE8A0D
+   checksum64: 11F908CB3C52E50215B97217D06ECA752224AEB3010CECFE2E9ED867AF1E7D6A
